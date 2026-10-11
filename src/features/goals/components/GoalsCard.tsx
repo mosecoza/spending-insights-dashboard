@@ -29,14 +29,14 @@ export default function GoalsCard() {
           </div>
           <div
             role="progressbar"
-            aria-valuenow={Math.round(g.percentageUsed)}
+            aria-valuenow={Math.min(Math.round(g.percentageUsed), 100)}
             aria-valuemin={0}
             aria-valuemax={100}
             aria-label={`${g.category} budget used`}
             className="h-2 bg-slate-200 rounded"
           >
             <div
-              className={`h-2 rounded ${g.status === 'warning' ? 'bg-amber-500' : 'bg-green-500'}`}
+              className={`h-2 rounded ${g.status === 'over_budget' ? 'bg-red-600' : g.status === 'warning' ? 'bg-amber-500' : 'bg-green-500'}`}
               style={{ width: `${Math.min(g.percentageUsed, 100)}%` }}
             />
           </div>
