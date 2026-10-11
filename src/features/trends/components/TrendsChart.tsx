@@ -11,21 +11,36 @@ export default function TrendsChart({ data }: { data: TrendPoint[] }) {
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip formatter={(value) => zar(Number(value))} />
-            <Line type="monotone" dataKey="totalSpent" stroke="#0f172a" strokeWidth={2} dot={false} />
+            <Line
+              type="monotone"
+              dataKey="totalSpent"
+              stroke="#0f172a"
+              strokeWidth={2}
+              dot={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <table className="sr-only">
         <caption>Monthly spending trend data</caption>
-        <thead><tr><th scope="col">Month</th><th scope="col">Total spent</th><th scope="col">Transactions</th><th scope="col">Average transaction</th></tr></thead>
-        <tbody>{data.map((point) => (
-          <tr key={point.month}>
-            <th scope="row">{point.month}</th>
-            <td>{zar(point.totalSpent)}</td>
-            <td>{point.transactionCount}</td>
-            <td>{zar(point.averageTransaction)}</td>
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col">Total spent</th>
+            <th scope="col">Transactions</th>
+            <th scope="col">Average transaction</th>
           </tr>
-        ))}</tbody>
+        </thead>
+        <tbody>
+          {data.map((point) => (
+            <tr key={point.month}>
+              <th scope="row">{point.month}</th>
+              <td>{zar(point.totalSpent)}</td>
+              <td>{point.transactionCount}</td>
+              <td>{zar(point.averageTransaction)}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </>
   );

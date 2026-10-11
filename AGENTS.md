@@ -1,10 +1,12 @@
 # AGENTS.md - spending-insights-dashboard
 
 ## Project
+
 Customer Spending Insights Dashboard.
 Mock-first, MSW-backed, TanStack Query + Zustand.
 
 ## Commands
+
 - `pnpm install` - install
 - `pnpm dev` - dev server
 - `pnpm build` - prod build
@@ -14,8 +16,9 @@ Mock-first, MSW-backed, TanStack Query + Zustand.
 - `pnpm lighthouse` - Lighthouse CI
 
 ## Conventions
+
 - TypeScript strict, no `any` without comment
-- Features in `src/features/<name>/` with `api.ts, hooks.ts, components/, __tests__/`
+- Features in `src/features/<name>/` with `api.ts`, `hooks.ts`, `components/`, and colocated `__tests__/`
 - Server state ONLY via TanStack Query. UI filters via Zustand.
 - Query keys: `['summary', period]`, `['categories', {period,startDate,endDate}]`, `['trends', months]`, `['transactions', {page,category,sortBy,dates}]`, `['goals']`, `['filters']`
 - Currency: `Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR'})`

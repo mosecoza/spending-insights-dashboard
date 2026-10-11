@@ -6,9 +6,15 @@ export default function PeriodPicker() {
   return (
     <div role="tablist" aria-label="Period" className="flex gap-2">
       {periods.map((p) => (
-        <button key={p} role="tab" aria-selected={period === p}
+        <button
+          key={p}
+          role="tab"
+          aria-selected={period === p}
           className={`px-3 py-1 rounded-full border ${period === p ? 'bg-slate-900 text-white' : 'bg-white'}`}
-          onClick={() => set({ period: p, startDate: undefined, endDate: undefined, page: 0 })}>{p}</button>
+          onClick={() => set({ period: p, startDate: undefined, endDate: undefined, page: 0 })}
+        >
+          {p}
+        </button>
       ))}
     </div>
   );

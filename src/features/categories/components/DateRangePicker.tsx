@@ -11,7 +11,7 @@ export default function DateRangePicker() {
     const end = nextEnd || undefined;
     const startResult = start ? dateSchema.safeParse(start) : undefined;
     const endResult = end ? dateSchema.safeParse(end) : undefined;
-    if (startResult && !startResult.success || endResult && !endResult.success) {
+    if ((startResult && !startResult.success) || (endResult && !endResult.success)) {
       setError('Enter valid calendar dates.');
       return;
     }
@@ -59,7 +59,11 @@ export default function DateRangePicker() {
       >
         Clear dates
       </button>
-      {error && <p className="w-full text-sm text-red-700" role="alert">{error}</p>}
+      {error && (
+        <p className="w-full text-sm text-red-700" role="alert">
+          {error}
+        </p>
+      )}
     </fieldset>
   );
 }
