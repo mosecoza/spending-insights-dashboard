@@ -6,3 +6,4 @@
 | 2026-10-11 | Charts and accessibility | Add trends table fallback and formatted chart values | Auto | Reviewed + edited | ~30m |
 | 2026-10-11 | Tests and tooling | Cover URL filters and mock aggregates; configure Node tests and TypeScript linting | Auto | Implemented + tested | ~1h |
 | 2026-10-11 | Startup and filters | Add validated shareable URL/custom-date filters and fix Tailwind/MSW startup | Auto | Reviewed + smoke-tested | ~1h |
+| 2026-10-11 | Push test hook | Run unit tests affected by outgoing commits before each push | Auto | Implemented + tested | ~30m |

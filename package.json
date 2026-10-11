@@ -8,8 +8,10 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:affected": "node scripts/test-affected.mjs",
     "test:e2e": "playwright test",
-    "lint": "eslint src --ext .ts,.tsx"
+    "lint": "eslint src --ext .ts,.tsx",
+    "prepare": "husky"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.0.0",
@@ -32,6 +34,7 @@
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^9.0.0",
+    "husky": "^9.1.7",
     "msw": "^2.3.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",

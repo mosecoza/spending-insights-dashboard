@@ -11,9 +11,12 @@ Mock-first, MSW-backed, TanStack Query + Zustand.
 - `pnpm dev` - dev server
 - `pnpm build` - prod build
 - `pnpm test` - Vitest
+- `pnpm test:affected` - run tests related to changes being pushed
 - `pnpm test:e2e` - Playwright/Cypress
 - `pnpm lint` - ESLint
 - `pnpm lighthouse` - Lighthouse CI
+
+Husky's pre-push hook runs affected unit tests before each push.
 
 ## Conventions
 

@@ -11,6 +11,8 @@ pnpm test
 pnpm build
 ```
 
+Before pushing, Husky runs unit tests for changed test files and tests related to changed source files.
+
 ## Decisions
 
 - TanStack Query for server state and Zustand for UI filters
