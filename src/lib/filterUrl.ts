@@ -8,12 +8,16 @@ export interface DashboardFilters {
   category?: string;
   sortBy: SortBy;
   page: number;
+  limit: number;
+  months: number;
 }
 
 const defaults: DashboardFilters = {
   period: '30d',
   sortBy: 'date_desc',
   page: 0,
+  limit: 20,
+  months: 12,
 };
 
 export function parseFilterSearch(search: string): DashboardFilters {
@@ -25,6 +29,8 @@ export function parseFilterSearch(search: string): DashboardFilters {
     category: params.get('category') ?? undefined,
     sortBy: params.get('sortBy') ?? undefined,
     page: params.get('page') ?? undefined,
+    limit: params.get('limit') ?? undefined,
+    months: params.get('months') ?? undefined,
   });
 
   return parsed.success ? parsed.data : defaults;
@@ -42,5 +48,7 @@ export function serializeFilterSearch(filters: DashboardFilters): string {
   if (value.category) params.set('category', value.category);
   if (value.sortBy !== defaults.sortBy) params.set('sortBy', value.sortBy);
   if (value.page > 0) params.set('page', String(value.page));
+  if (value.limit !== defaults.limit) params.set('limit', String(value.limit));
+  if (value.months !== defaults.months) params.set('months', String(value.months));
   return params.toString();
 }

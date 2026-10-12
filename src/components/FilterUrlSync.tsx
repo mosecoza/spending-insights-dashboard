@@ -1,25 +1,49 @@
 import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { parseFilterSearch, serializeFilterSearch } from '../lib/filterUrl';
 import { useFilters } from '../store/useFilters';
 
 export function FilterUrlSync() {
-  useEffect(() => {
-    const syncToUrl = (state: ReturnType<typeof useFilters.getState>) => {
-      const search = serializeFilterSearch(state);
-      const nextUrl = `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`;
-      const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-      if (nextUrl !== currentUrl) window.history.replaceState(window.history.state, '', nextUrl);
-    };
-    const unsubscribe = useFilters.subscribe((state) => syncToUrl(state));
-    const handlePopState = () => useFilters.getState().set(parseFilterSearch(window.location.search));
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    syncToUrl(useFilters.getState());
-    window.addEventListener('popstate', handlePopState);
+  useEffect(() => {
+    const parsed = parseFilterSearch(location.search);
+    const current = useFilters.getState();
+    if (
+      current.period !== parsed.period ||
+      current.startDate !== parsed.startDate ||
+      current.endDate !== parsed.endDate ||
+      current.category !== parsed.category ||
+      current.sortBy !== parsed.sortBy ||
+      current.page !== parsed.page ||
+      current.limit !== parsed.limit ||
+      current.months !== parsed.months
+    ) {
+      current.set({
+        ...parsed,
+        startDate: parsed.startDate,
+        endDate: parsed.endDate,
+        category: parsed.category,
+      });
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    const unsubscribe = useFilters.subscribe((state) => {
+      const search = serializeFilterSearch(state);
+      const currentSearch = location.search.replace(/^\?/, '');
+      if (search !== currentSearch) {
+        navigate(
+          { pathname: location.pathname, search: search ? `?${search}` : '' },
+          { replace: true },
+        );
+      }
+    });
     return () => {
       unsubscribe();
-      window.removeEventListener('popstate', handlePopState);
     };
-  }, []);
+  }, [location.pathname, location.search, navigate]);
 
   return null;
 }
