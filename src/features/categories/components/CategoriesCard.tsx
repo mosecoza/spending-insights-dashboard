@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { useCategories } from '../hooks';
 import { zar } from '../../../lib/api';
+import { CategoryIcon } from '../../../lib/categoryIcons';
 
 const CategoryDonut = lazy(() => import('./CategoryDonut'));
 
@@ -38,7 +39,8 @@ export default function CategoriesCard() {
           {data.categories.map((c) => (
             <tr key={c.name} className="border-t">
               <td>
-                <span style={{ color: c.color }}>●</span> {c.name}
+                <CategoryIcon name={c.icon} className="inline size-4" style={{ color: c.color }} />{' '}
+                {c.name}
               </td>
               <td>{zar(c.amount)}</td>
               <td>{c.percentage}%</td>

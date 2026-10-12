@@ -1,3 +1,4 @@
+import { format, parseISO, subDays } from 'date-fns';
 import type { Period } from '../types/api';
 
 export const DEMO_DATE_ANCHOR = '2024-09-16';
@@ -9,10 +10,12 @@ const periodDays: Record<Period, number> = {
   '1y': 365,
 };
 
-export function periodDateRange(period: Period, endDate: string): { startDate: string; endDate: string } {
-  const end = new Date(`${endDate}T00:00:00.000Z`);
-  end.setUTCDate(end.getUTCDate() - periodDays[period] + 1);
-  return { startDate: end.toISOString().slice(0, 10), endDate };
+export function periodDateRange(
+  period: Period,
+  endDate: string,
+): { startDate: string; endDate: string } {
+  const start = subDays(parseISO(endDate), periodDays[period] - 1);
+  return { startDate: format(start, 'yyyy-MM-dd'), endDate };
 }
 
 export function resolveDateRange(

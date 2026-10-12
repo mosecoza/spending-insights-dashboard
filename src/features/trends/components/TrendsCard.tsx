@@ -1,9 +1,13 @@
 import { Suspense, lazy } from 'react';
 import { useTrends } from '../hooks';
+import { useFilters } from '../../../store/useFilters';
+import { trendsQuerySchema } from '../../../lib/validation';
 
 const TrendsChart = lazy(() => import('./TrendsChart'));
 
 export default function TrendsCard() {
+  const months = useFilters((state) => state.months);
+  const set = useFilters((state) => state.set);
   const { data, isLoading, isError } = useTrends();
   if (isLoading)
     return (
@@ -25,7 +29,24 @@ export default function TrendsCard() {
     );
   return (
     <section aria-label="Monthly trends" className="card">
-      <h2 className="font-semibold mb-2">Monthly trends</h2>
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="font-semibold">Monthly trends</h2>
+        <label className="flex items-center gap-2 text-sm">
+          <span>Months</span>
+          <select
+            aria-label="Trend months"
+            value={months}
+            onChange={(event) => {
+              const nextMonths = trendsQuerySchema.shape.months.parse(event.target.value);
+              set({ months: nextMonths });
+            }}
+          >
+            <option value={6}>6</option>
+            <option value={12}>12</option>
+            <option value={24}>24</option>
+          </select>
+        </label>
+      </div>
       <Suspense fallback={<div className="skeleton h-48" />}>
         <TrendsChart data={data.trends} />
       </Suspense>
