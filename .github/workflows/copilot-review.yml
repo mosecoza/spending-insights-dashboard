@@ -1,0 +1,56 @@
+name: Copilot tech lead review
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  request-review:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request Copilot review
+        # Uses only trusted workflow code and the GitHub API; never checks out PR code.
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const reviewer = 'copilot-pull-request-reviewer[bot]';
+            const { owner, repo } = context.repo;
+            const pull_number = context.payload.pull_request.number;
+            const headSha = context.payload.pull_request.head.sha;
+
+            const { data: requested } = await github.rest.pulls.listRequestedReviewers({
+              owner,
+              repo,
+              pull_number,
+            });
+            if (requested.users.some((user) => user.login === reviewer)) {
+              core.info('Copilot is already a requested reviewer.');
+              return;
+            }
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner,
+              repo,
+              pull_number,
+              per_page: 100,
+            });
+            if (
+              reviews.some(
+                (review) => review.user?.login === reviewer && review.commit_id === headSha,
+              )
+            ) {
+              core.info('Copilot has already reviewed the current head commit.');
+              return;
+            }
+
+            await github.rest.pulls.requestReviewers({
+              owner,
+              repo,
+              pull_number,
+              reviewers: [reviewer],
+            });
+            core.info('Requested Copilot code review.');

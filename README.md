@@ -13,6 +13,14 @@ pnpm build
 
 Before pushing, Husky runs unit tests for changed test files and tests related to changed source files.
 
+## Pull request reviews
+
+The `Copilot tech lead review` workflow requests a GitHub Copilot code review when a pull request is opened, reopened, marked ready for review, or updated with new commits. It skips drafts and avoids requesting a duplicate review for the same head commit.
+
+Review guidance in `.github/copilot-instructions.md` focuses Copilot on inline, actionable feedback, security issues, logic and edge cases, and project conventions. Copilot code review must be available for the repository, and repository custom instructions must be enabled in Copilot settings for this guidance to apply.
+
+Copilot reviews use AI credits under the repository owner's Copilot plan and organization policies. Choose the **Balanced** review effort in Copilot settings for deeper security and logic analysis.
+
 ## Decisions
 
 - TanStack Query for server state and Zustand for UI filters
