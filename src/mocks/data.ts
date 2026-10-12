@@ -3,6 +3,7 @@ import { DEMO_DATE_ANCHOR, periodDateRange, resolveDateRange } from '../lib/date
 import type {
   CategoriesResponse,
   CategorySlice,
+  Goal,
   Period,
   SortBy,
   SpendingSummary,
@@ -61,14 +62,17 @@ export function filterTransactions(filters: {
     ? resolveDateRange(filters.period, filters.startDate, filters.endDate, MOCK_TODAY)
     : filters.startDate || filters.endDate
       ? {
-          startDate: filters.startDate ?? demoTransactions[demoTransactions.length - 1].date.slice(0, 10),
+          startDate:
+            filters.startDate ?? demoTransactions[demoTransactions.length - 1].date.slice(0, 10),
           endDate: filters.endDate ?? MOCK_TODAY,
         }
       : undefined;
   const result = demoTransactions.filter((transaction) => {
     const date = transaction.date.slice(0, 10);
-    return (!range || (date >= range.startDate && date <= range.endDate))
-      && (!filters.category || transaction.category === filters.category);
+    return (
+      (!range || (date >= range.startDate && date <= range.endDate)) &&
+      (!filters.category || transaction.category === filters.category)
+    );
   });
 
   return result.sort((a, b) => {
@@ -112,7 +116,9 @@ export function getSummary(period: Period): SpendingSummary {
     averageTransaction: current.length ? Number((totalSpent / current.length).toFixed(2)) : 0,
     topCategory,
     comparedToPrevious: {
-      spentChange: previousSpent ? Number((((totalSpent - previousSpent) / previousSpent) * 100).toFixed(1)) : 0,
+      spentChange: previousSpent
+        ? Number((((totalSpent - previousSpent) / previousSpent) * 100).toFixed(1))
+        : 0,
       transactionChange: previous.length
         ? Number((((current.length - previous.length) / previous.length) * 100).toFixed(1))
         : 0,
@@ -120,7 +126,11 @@ export function getSummary(period: Period): SpendingSummary {
   };
 }
 
-export function getCategories(period: Period, startDate?: string, endDate?: string): CategoriesResponse {
+export function getCategories(
+  period: Period,
+  startDate?: string,
+  endDate?: string,
+): CategoriesResponse {
   const range = resolveDateRange(period, startDate, endDate, MOCK_TODAY);
   const transactions = filterTransactions({ period, startDate, endDate, sortBy: 'date_desc' });
   const amounts = new Map<string, { amount: number; transactionCount: number }>();
@@ -158,7 +168,9 @@ export function getTrends(months: number): TrendPoint[] {
   });
 
   return monthKeys.map((month) => {
-    const transactions = demoTransactions.filter((transaction) => transaction.date.startsWith(month));
+    const transactions = demoTransactions.filter((transaction) =>
+      transaction.date.startsWith(month),
+    );
     const totalSpent = transactions.reduce((total, transaction) => total + transaction.amount, 0);
     return {
       month,
@@ -169,4 +181,47 @@ export function getTrends(months: number): TrendPoint[] {
         : 0,
     };
   });
+}
+
+export function getGoals(): { goals: Goal[] } {
+  const month = MOCK_TODAY.slice(0, 7);
+  const monthTransactions = demoTransactions.filter((transaction) =>
+    transaction.date.startsWith(month),
+  );
+  const budgets: Record<string, number> = {
+    Groceries: 1000,
+    Entertainment: 400,
+    Transportation: 450,
+    Dining: 350,
+    Shopping: 400,
+    Utilities: 500,
+  };
+  const year = Number(MOCK_TODAY.slice(0, 4));
+  const monthNumber = Number(MOCK_TODAY.slice(5, 7));
+  const daysInMonth = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+  const daysRemaining = daysInMonth - Number(MOCK_TODAY.slice(8, 10));
+
+  return {
+    goals: categoryMetadata.map((category) => {
+      const currentSpent = Number(
+        monthTransactions
+          .filter((transaction) => transaction.category === category.name)
+          .reduce((total, transaction) => total + transaction.amount, 0)
+          .toFixed(2),
+      );
+      const monthlyBudget = budgets[category.name] ?? 500;
+      const percentageUsed = Number(((currentSpent / monthlyBudget) * 100).toFixed(2));
+
+      return {
+        id: `goal_${category.name.toLowerCase()}`,
+        category: category.name,
+        monthlyBudget,
+        currentSpent,
+        percentageUsed,
+        daysRemaining,
+        status:
+          percentageUsed >= 100 ? 'over_budget' : percentageUsed >= 80 ? 'warning' : 'on_track',
+      };
+    }),
+  };
 }

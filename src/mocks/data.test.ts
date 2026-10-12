@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { demoTransactions, filterTransactions, getCategories, getSummary, getTrends } from './data';
+import {
+  demoTransactions,
+  filterTransactions,
+  getCategories,
+  getGoals,
+  getSummary,
+  getTrends,
+} from './data';
 
 describe('demo API data', () => {
   it('provides the declared full transaction count and consistent pages', () => {
@@ -34,7 +41,9 @@ describe('demo API data', () => {
     const summary = getSummary('7d');
 
     expect(categories.totalAmount).toBeGreaterThan(0);
-    expect(categories.categories.reduce((sum, category) => sum + category.transactionCount, 0)).toBe(7);
+    expect(
+      categories.categories.reduce((sum, category) => sum + category.transactionCount, 0),
+    ).toBe(7);
     expect(summary.transactionCount).toBe(7);
     expect(summary.totalSpent).toBe(categories.totalAmount);
   });
@@ -44,5 +53,18 @@ describe('demo API data', () => {
     expect(trends).toHaveLength(6);
     expect(trends[5].month).toBe('2024-09');
     expect(trends[5].transactionCount).toBeGreaterThan(0);
+  });
+
+  it('derives monthly goals from transactions and reports over-budget status', () => {
+    const { goals } = getGoals();
+    const septemberSpending = demoTransactions
+      .filter((transaction) => transaction.date.startsWith('2024-09'))
+      .filter((transaction) => transaction.category === 'Groceries')
+      .reduce((total, transaction) => total + transaction.amount, 0);
+    const groceriesGoal = goals.find((goal) => goal.category === 'Groceries');
+
+    expect(goals).toHaveLength(6);
+    expect(groceriesGoal?.currentSpent).toBe(Number(septemberSpending.toFixed(2)));
+    expect(goals.some((goal) => goal.status === 'over_budget')).toBe(true);
   });
 });
