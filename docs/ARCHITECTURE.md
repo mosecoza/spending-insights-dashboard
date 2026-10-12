@@ -4,19 +4,19 @@
 
 ```
 src/
-  lib/api.ts (Axios, query keys, ZAR), dateRange.ts, filterUrl.ts, validation.ts (zod)
+  lib/api.ts (Axios, query keys, ZAR), dateRange.ts, filterUrl.ts, validation.ts (zod), categoryIcons.tsx
   types/api.ts
   mocks/handlers.ts, data.ts (deterministic 1,250-transaction fixture), seed.json, browser.ts
-  store/useFilters.ts (Zustand: period, dates, category, sortBy, page, months)
+  store/useFilters.ts (Zustand: period, dates, category, sortBy, page, limit, months)
   features/{profile,summary,categories,trends,transactions,goals}/
-    api.ts, hooks.ts, components/, __tests__/
+    api.ts hooks.ts components/ __tests__/
   components/FilterUrlSync.tsx, ErrorBoundary.tsx
 ```
 
 ## State split
 
 - Server: TanStack Query only. Stale 30s, cache 5m.
-- UI: Zustand + validated URL search params (period, custom dates, category, sort, page).
+- UI: Zustand + React Router URL search params (period, custom dates, category, sort, page, page size, trend months).
 - Period selection applies to summary/category data; the transaction endpoint uses explicit custom dates because its contract has no period parameter.
 
 ## Routing
@@ -29,4 +29,10 @@ MSW handlers validate query parameters with Zod and return filtered, sorted, pag
 
 ## Perf
 
-Lazy Recharts, useMemo aggregates, virtualize transactions if >100 rendered, code-split routes.
+Recharts charts are lazy-loaded; the transactions API caps each rendered page at 100 rows, so client-side virtualization is not currently needed. Routes are not code-split because the app has a single dashboard route.
+
+## Quality gates
+
+Vitest unit tests, Playwright filter-to-pagination E2E, ESLint, Prettier with a Husky pre-commit hook, and Lighthouse CI performance/accessibility assertions (>=90) run locally and in GitHub Actions.
+
+The single-page UI keeps its shared Tailwind primitives local rather than adding a generated component library.

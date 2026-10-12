@@ -9,8 +9,17 @@ export const queryKeys = {
   categories: (id: string, p: { period: Period; startDate?: string; endDate?: string }) =>
     ['categories', id, p] as const,
   trends: (id: string, months: number) => ['trends', id, months] as const,
-  transactions: (id: string, q: { limit: number; offset: number; category?: string; startDate?: string; endDate?: string; sortBy: SortBy }) =>
-    ['transactions', id, q] as const,
+  transactions: (
+    id: string,
+    q: {
+      limit: number;
+      offset: number;
+      category?: string;
+      startDate?: string;
+      endDate?: string;
+      sortBy: SortBy;
+    },
+  ) => ['transactions', id, q] as const,
   goals: (id: string) => ['goals', id] as const,
   filters: (id: string) => ['filters', id] as const,
 };
