@@ -1,8 +1,11 @@
 # PRD - Spending Insights Dashboard
+
 ## Goal
+
 Provide an accessible customer spending dashboard with reliable profile, summary, category, trend, transaction, and goal views.
 
 ## Scope (from CustomerSpendingInsightsEndpoints.md)
+
 1. Profile header: GET /api/customers/{id}/profile
 2. Summary cards: GET .../spending/summary?period=7d|30d|90d|1y + comparedToPrevious
 3. Categories donut + custom dates: GET .../categories?period&startDate&endDate
@@ -12,6 +15,7 @@ Provide an accessible customer spending dashboard with reliable profile, summary
 7. Filters metadata: GET .../filters
 
 ## Acceptance
+
 - All filters update URL + query keys, loading/skeleton/error/empty states
 - Pagination correct (offset math), sort persists
 - a11y: keyboard filters, aria charts, table semantics

@@ -1,4 +1,5 @@
 # API CONTRACT (copy from CustomerSpendingInsightsEndpoints.md - DO NOT invent endpoints)
+
 Base: /api/customers/{customerId}
 
 1. GET /profile -> {customerId,name,email,joinDate,accountType,totalSpent,currency:ZAR}

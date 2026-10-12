@@ -7,14 +7,18 @@ Mock-first, MSW-backed, TanStack Query + Zustand.
 
 ## Commands
 
-- `pnpm install` - install
-- `pnpm dev` - dev server
-- `pnpm build` - prod build
-- `pnpm test` - Vitest
-- `pnpm test:affected` - run tests related to changes being pushed
-- `pnpm test:e2e` - Playwright/Cypress
-- `pnpm lint` - ESLint
-- `pnpm lighthouse` - Lighthouse CI
+- `yarn install` - install
+- `yarn dev` - dev server
+- `yarn build` - production build
+- `yarn test` - Vitest
+- `yarn test:affected` - run Vitest tests affected by pushed changes
+- `yarn test:e2e` - Playwright
+- `yarn playwright install chromium` - install the local Playwright browser
+- `yarn lint` - ESLint
+- `yarn format:check` - Prettier
+- `yarn lighthouse` - Lighthouse CI
+
+The Husky pre-push hook runs affected unit tests for the commits being pushed.
 
 Husky's pre-push hook runs affected unit tests before each push.
 
@@ -23,10 +27,11 @@ Husky's pre-push hook runs affected unit tests before each push.
 - TypeScript strict, no `any` without comment
 - Features in `src/features/<name>/` with `api.ts`, `hooks.ts`, `components/`, and colocated `__tests__/`
 - Server state ONLY via TanStack Query. UI filters via Zustand.
-- Query keys: `['summary', period]`, `['categories', {period,startDate,endDate}]`, `['trends', months]`, `['transactions', {page,category,sortBy,dates}]`, `['goals']`, `['filters']`
+- Query keys live in `src/lib/api.ts`; each feature owns its API client and query hooks.
+- URL-backed UI filters include period, custom dates, category, sort, page, page size, and trend months.
 - Currency: `Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR'})`
 - Colors/icons come from API (`color`, `icon`), map icon string -> lucide-react.
 - No PII in logs. Validate all filter inputs with zod.
-- Accessibility: charts need aria-label + table fallback, tables keyboard navigable.
+- Accessibility: charts need aria-label + table fallback; use semantic, keyboard-accessible controls and table markup.
 - Never hallucinate endpoints - only those in docs/API_CONTRACT.md
 - Log all AI help in AI_USAGE.md

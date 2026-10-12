@@ -5,10 +5,15 @@ A mock-first banking dashboard built with React and TypeScript. It demonstrates 
 ## Run
 
 ```bash
-pnpm install
-pnpm dev    # MSW mocks API automatically
-pnpm test
-pnpm build
+yarn install
+yarn dev          # MSW mocks API automatically
+yarn test
+yarn test:affected
+yarn test:e2e
+yarn lint
+yarn format:check
+yarn lighthouse
+yarn build
 ```
 
 Before pushing, Husky runs unit tests for changed test files and tests related to changed source files.
@@ -26,7 +31,7 @@ Copilot reviews use AI credits under the repository owner's Copilot plan and org
 - TanStack Query for server state and Zustand for UI filters
 - Recharts for spending visualizations
 - MSW mocked from `docs/API_CONTRACT.md`
-- ZAR via Intl, zod validation, WCAG AA, Lighthouse >=90
+- ZAR via Intl, zod validation, accessible charts/tables, Lighthouse CI performance/accessibility >=90
 
 ## What AI did vs What I did
 
@@ -35,4 +40,6 @@ Copilot reviews use AI credits under the repository owner's Copilot plan and org
 
 ## Structure
 
-`src/features/<profile|summary|categories|trends|transactions|goals>/` (each with feature API, hooks, components, and tests) + shared `src/lib/`, `src/types/`, and `src/mocks/`
+`src/features/<profile|summary|categories|trends|transactions|goals>/` with feature API, hooks, components, and tests; shared utilities live in `src/lib/`.
+
+The project uses Tailwind and a small set of shared card/layout classes; a generated component framework is intentionally not added for this single-page showcase.
