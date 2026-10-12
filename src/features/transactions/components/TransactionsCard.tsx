@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useTransactions, useFilterMeta } from '../hooks';
 import { useFilters } from '../../../store/useFilters';
 import { zar } from '../../../lib/api';
-import { categorySchema, sortBySchema } from '../../../lib/validation';
+import { categorySchema, sortBySchema, transactionLimitSchema } from '../../../lib/validation';
+import { CategoryIcon } from '../../../lib/categoryIcons';
 
 export default function TransactionsCard() {
   const { page, limit, category, sortBy, set } = useFilters();
@@ -54,6 +55,21 @@ export default function TransactionsCard() {
           <option value="amount_desc">Amount high</option>
           <option value="amount_asc">Amount low</option>
         </select>
+        <label className="flex items-center gap-2 text-sm">
+          <span>Rows per page</span>
+          <select
+            aria-label="Rows per page"
+            value={limit}
+            onChange={(event) => {
+              const nextLimit = transactionLimitSchema.parse(event.target.value);
+              set({ limit: nextLimit, page: 0 });
+            }}
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </label>
       </div>
       <table className="w-full text-sm">
         <caption className="sr-only">Transactions for the selected filters</caption>
@@ -67,11 +83,20 @@ export default function TransactionsCard() {
         </thead>
         <tbody>
           {data.transactions.map((t) => (
-            <tr key={t.id} className="border-t">
+            <tr
+              key={t.id}
+              tabIndex={0}
+              className="border-t focus-visible:outline focus-visible:outline-2"
+            >
               <td>{new Date(t.date).toLocaleDateString()}</td>
               <td>{t.merchant}</td>
               <td>
-                <span style={{ color: t.categoryColor }}>●</span> {t.category}
+                <CategoryIcon
+                  name={t.icon}
+                  className="inline size-4"
+                  style={{ color: t.categoryColor }}
+                />{' '}
+                {t.category}
               </td>
               <td>{zar(t.amount)}</td>
             </tr>
