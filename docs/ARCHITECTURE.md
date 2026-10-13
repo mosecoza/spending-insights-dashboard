@@ -36,3 +36,7 @@ Recharts charts are lazy-loaded; the transactions API caps each rendered page at
 Vitest unit tests, Playwright filter-to-pagination E2E, ESLint, Prettier with a Husky pre-commit hook, and Lighthouse CI performance/accessibility assertions (>=90) run locally and in GitHub Actions.
 
 The single-page UI keeps its shared Tailwind primitives local rather than adding a generated component library.
+
+## Containers
+
+`Dockerfile` builds the frontend with Node 22 and serves the production assets from Nginx. `compose.yaml` provides a bind-mounted development service with MSW and an opt-in production service. The production image serves static assets only; it does not provide or proxy the `/api` endpoints.

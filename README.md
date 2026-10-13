@@ -18,6 +18,35 @@ yarn build
 
 Before pushing, Husky runs unit tests for changed test files and tests related to changed source files.
 
+## Run with Docker
+
+Docker Desktop or another Docker Engine with Compose is required.
+
+Start the development server with hot reload and MSW mocks:
+
+```bash
+docker compose up --build dashboard
+```
+
+Open <http://localhost:5173>. Source files are mounted from the working directory. Stop the service with `Ctrl+C`, then remove its container with `docker compose down`.
+
+Build and run the production frontend image:
+
+```bash
+docker compose --profile production up --build production
+```
+
+Open <http://localhost:8080>. The image serves the Vite build with Nginx and supports client-side route fallback. MSW is development-only; the production image does not include a backend or API proxy. Since the app requests `/api`, production use requires a real API available at that path (or a separately configured proxy). Stop and remove containers with `docker compose --profile production down`.
+
+If port 8080 is already in use, override the host port before starting Compose, for example in PowerShell:
+
+```powershell
+$env:DASHBOARD_PORT = "8081"
+docker compose --profile production up --build production
+```
+
+Then open <http://localhost:8081>.
+
 ## Pull request reviews
 
 The `Copilot tech lead review` workflow requests a GitHub Copilot code review when a pull request is opened, reopened, marked ready for review, or updated with new commits. It skips drafts and avoids requesting a duplicate review for the same head commit.
