@@ -17,6 +17,8 @@ Mock-first, MSW-backed, TanStack Query + Zustand.
 - `yarn lint` - ESLint
 - `yarn format:check` - Prettier
 - `yarn lighthouse` - Lighthouse CI
+- `docker compose up --build dashboard` - development container with MSW
+- `docker compose --profile production up --build production` - production frontend on port 8080
 
 The Husky pre-push hook runs affected unit tests for the commits being pushed.
 

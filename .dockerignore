@@ -1,0 +1,14 @@
+.git
+.github
+.husky
+.lighthouseci
+.yarn
+career
+coverage
+dist
+node_modules
+playwright-report
+test-results
+.env
+.env.*
+!.env.example
