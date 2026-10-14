@@ -1,8 +1,9 @@
-import { api, DEMO_CUSTOMER_ID } from '../../lib/api';
+import { api, customerApiPath } from '../../lib/api';
 import { transactionsQuerySchema } from '../../lib/validation';
 import type { FiltersResponse, SortBy, TransactionsResponse } from '../../types/api';
 
 export async function getTransactions(filters: {
+  customerId: string;
   limit: number;
   offset: number;
   category?: string;
@@ -10,14 +11,15 @@ export async function getTransactions(filters: {
   endDate?: string;
   sortBy: SortBy;
 }) {
-  const validFilters = transactionsQuerySchema.parse(filters);
+  const { customerId, ...query } = filters;
+  const validFilters = transactionsQuerySchema.parse(query);
   return (
-    await api.get<TransactionsResponse>(`/customers/${DEMO_CUSTOMER_ID}/transactions`, {
+    await api.get<TransactionsResponse>(customerApiPath(customerId, 'transactions'), {
       params: validFilters,
     })
   ).data;
 }
 
-export async function getFilterMeta() {
-  return (await api.get<FiltersResponse>(`/customers/${DEMO_CUSTOMER_ID}/filters`)).data;
+export async function getFilterMeta(customerId: string) {
+  return (await api.get<FiltersResponse>(customerApiPath(customerId, 'filters'))).data;
 }
