@@ -7,8 +7,8 @@ describe('trends API', () => {
 
   it('requests the selected number of months', () => {
     const get = vi.spyOn(api, 'get').mockReturnValue(new Promise(() => undefined));
-    void getTrends(24);
-    expect(get).toHaveBeenCalledWith('/customers/12345/spending/trends', {
+    void getTrends('67890', 24);
+    expect(get).toHaveBeenCalledWith('/customers/67890/spending/trends', {
       params: { months: 24 },
     });
   });

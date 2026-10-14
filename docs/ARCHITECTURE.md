@@ -7,7 +7,7 @@ src/
   lib/api.ts (Axios, query keys, ZAR), dateRange.ts, filterUrl.ts, validation.ts (zod), categoryIcons.tsx
   types/api.ts
   mocks/handlers.ts, data.ts (deterministic 1,250-transaction fixture), seed.json, browser.ts
-  store/useFilters.ts (Zustand: period, dates, category, sortBy, page, limit, months)
+  store/useFilters.ts (Zustand: customerId, period, dates, category, sortBy, page, limit, months)
   features/{profile,summary,categories,trends,transactions,goals}/
     api.ts hooks.ts components/ __tests__/
   components/FilterUrlSync.tsx, ErrorBoundary.tsx
@@ -16,7 +16,8 @@ src/
 ## State split
 
 - Server: TanStack Query only. Stale 30s, cache 5m.
-- UI: Zustand + React Router URL search params (period, custom dates, category, sort, page, page size, trend months).
+- UI: Zustand owns the active customer ID (default `12345`) and filters in the existing shared store; hooks subscribe to only the fields they consume. React Router synchronizes filter search params only; customer ID is intentionally not URL-backed or shareable, so copied dashboard URLs always use the default customer.
+- Changing customer ID resets dashboard filters to their defaults. All customer-scoped query keys and API paths include the active ID; current per-resource key shapes are retained (for example, `['profile', customerId]`).
 - Period selection applies to summary/category data; the transaction endpoint uses explicit custom dates because its contract has no period parameter.
 
 ## Routing
@@ -25,7 +26,7 @@ src/
 
 ## Mock API
 
-MSW handlers validate query parameters with Zod and return filtered, sorted, paginated data and aggregates from a fixed 1,250-row fixture. The fixture date anchor is `2024-09-16` so mock results and tests are reproducible.
+MSW handlers validate query parameters with Zod and return filtered, sorted, paginated data and aggregates from fixed 1,250-row fixtures. Demo customers `12345`, `67890`, and `24680` have distinct profile and spending data; unsupported customer IDs receive HTTP 404. The fixture date anchor is `2024-09-16` so mock results and tests are reproducible.
 
 ## Perf
 

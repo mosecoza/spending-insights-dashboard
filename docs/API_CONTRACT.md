@@ -9,3 +9,5 @@ Base: /api/customers/{customerId}
 5. GET /transactions?limit(def20 max100)&offset&category&startDate&endDate&sortBy=date_desc|date_asc|amount_desc|amount_asc -> {transactions[]:{id,date,merchant,category,amount,description,paymentMethod,icon,categoryColor},pagination:{total,limit,offset,hasMore}}
 6. GET /goals -> {goals[]:{id,category,monthlyBudget,currentSpent,percentageUsed,daysRemaining,status:on_track|warning|over_budget}}
 7. GET /filters -> {categories[]:{name,color,icon},dateRangePresets[]:{label,value}}
+
+Mock data is available for customer IDs `12345`, `67890`, and `24680`. Requests for other IDs return HTTP 404; the customer ID is selected in the dashboard and is not serialized into the URL.

@@ -1,13 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys, DEMO_CUSTOMER_ID } from '../../lib/api';
+import { queryKeys } from '../../lib/api';
 import { useFilters } from '../../store/useFilters';
 import { getFilterMeta, getTransactions } from './api';
 
 export function useTransactions() {
-  const { limit, page, category, startDate, endDate, sortBy } = useFilters();
+  const customerId = useFilters((state) => state.customerId);
+  const limit = useFilters((state) => state.limit);
+  const page = useFilters((state) => state.page);
+  const category = useFilters((state) => state.category);
+  const startDate = useFilters((state) => state.startDate);
+  const endDate = useFilters((state) => state.endDate);
+  const sortBy = useFilters((state) => state.sortBy);
   const offset = page * limit;
   return useQuery({
-    queryKey: queryKeys.transactions(DEMO_CUSTOMER_ID, {
+    queryKey: queryKeys.transactions(customerId, {
       limit,
       offset,
       category,
@@ -15,15 +21,20 @@ export function useTransactions() {
       endDate,
       sortBy,
     }),
-    queryFn: () => getTransactions({ limit, offset, category, startDate, endDate, sortBy }),
-    placeholderData: (previous) => previous,
+    queryFn: () =>
+      getTransactions({ customerId, limit, offset, category, startDate, endDate, sortBy }),
+    enabled: customerId.length > 0,
+    placeholderData: (previous, previousQuery) =>
+      previousQuery?.queryKey[1] === customerId ? previous : undefined,
   });
 }
 
 export function useFilterMeta() {
+  const customerId = useFilters((state) => state.customerId);
   return useQuery({
-    queryKey: queryKeys.filters(DEMO_CUSTOMER_ID),
-    queryFn: getFilterMeta,
+    queryKey: queryKeys.filters(customerId),
+    queryFn: () => getFilterMeta(customerId),
+    enabled: customerId.length > 0,
     staleTime: Infinity,
   });
 }

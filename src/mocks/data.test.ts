@@ -3,12 +3,34 @@ import {
   demoTransactions,
   filterTransactions,
   getCategories,
+  getCustomerProfile,
   getGoals,
   getSummary,
   getTrends,
 } from './data';
 
 describe('demo API data', () => {
+  it('provides distinct profile and transaction fixtures for supported customers', () => {
+    expect(getCustomerProfile('12345').name).toBe('John Doe');
+    expect(getCustomerProfile('67890').name).toBe('Ayesha Khan');
+
+    const firstCustomer = filterTransactions({ period: '30d', sortBy: 'date_desc' }, '12345')[0];
+    const secondCustomer = filterTransactions({ period: '30d', sortBy: 'date_desc' }, '67890')[0];
+    expect(secondCustomer.id).not.toBe(firstCustomer.id);
+    expect(secondCustomer.amount).not.toBe(firstCustomer.amount);
+  });
+
+  it('rejects unsupported customer IDs in customer data helpers', () => {
+    expect(() => getCustomerProfile('99999')).toThrow('Unsupported demo customer ID');
+    expect(() => filterTransactions({ sortBy: 'date_desc' }, '99999')).toThrow(
+      'Unsupported demo customer ID',
+    );
+  });
+
+  it('returns a profile with the requested customer ID', () => {
+    expect(getCustomerProfile('67890').customerId).toBe('67890');
+  });
+
   it('provides the declared full transaction count and consistent pages', () => {
     const allTransactions = filterTransactions({ sortBy: 'date_desc' });
     const firstPage = allTransactions.slice(0, 20);

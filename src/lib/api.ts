@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { customerIdSchema } from './validation';
 import type { Period, SortBy } from '../types/api';
 
 export const api = axios.create({ baseURL: '/api', timeout: 10000 });
@@ -24,6 +25,8 @@ export const queryKeys = {
   filters: (id: string) => ['filters', id] as const,
 };
 
-export const DEMO_CUSTOMER_ID = '12345';
+export const DEFAULT_CUSTOMER_ID = '12345';
+export const customerApiPath = (customerId: string, resource: string) =>
+  `/customers/${encodeURIComponent(customerIdSchema.parse(customerId))}/${resource}`;
 export const zar = (n: number) =>
   new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(n);

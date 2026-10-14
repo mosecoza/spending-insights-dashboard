@@ -1,9 +1,13 @@
 import { create } from 'zustand';
 import { parseFilterSearch } from '../lib/filterUrl';
+import { DEFAULT_CUSTOMER_ID } from '../lib/api';
+import { customerIdSchema } from '../lib/validation';
 import type { DashboardFilters } from '../lib/filterUrl';
 
 interface FilterState extends DashboardFilters {
+  customerId: string;
   set: (p: Partial<DashboardFilters>) => void;
+  setCustomerId: (customerId: string) => void;
   resetPage: () => void;
 }
 
@@ -12,6 +16,19 @@ const initialFilters =
 
 export const useFilters = create<FilterState>((set) => ({
   ...initialFilters,
+  customerId: DEFAULT_CUSTOMER_ID,
   set: (filters) => set(filters),
+  setCustomerId: (customerId) =>
+    set((state) => {
+      const validatedCustomerId = customerIdSchema.parse(customerId);
+      if (validatedCustomerId === state.customerId) return state;
+      return {
+        ...parseFilterSearch(''),
+        startDate: undefined,
+        endDate: undefined,
+        category: undefined,
+        customerId: validatedCustomerId,
+      };
+    }),
   resetPage: () => set({ page: 0 }),
 }));

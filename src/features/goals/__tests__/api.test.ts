@@ -7,7 +7,7 @@ describe('goals API', () => {
 
   it('requests the customer goals endpoint', () => {
     const get = vi.spyOn(api, 'get').mockReturnValue(new Promise(() => undefined));
-    void getGoals();
-    expect(get).toHaveBeenCalledWith('/customers/12345/goals');
+    void getGoals('67890');
+    expect(get).toHaveBeenCalledWith('/customers/67890/goals');
   });
 });

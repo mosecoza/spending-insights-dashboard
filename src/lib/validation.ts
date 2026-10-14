@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const periodSchema = z.enum(['7d', '30d', '90d', '1y']);
 export const sortBySchema = z.enum(['date_desc', 'date_asc', 'amount_desc', 'amount_asc']);
+export const customerIdSchema = z.string().trim().min(1).max(80);
 export const dateSchema = z.string().date();
 export const categorySchema = z.string().trim().min(1).max(80);
 export const transactionLimitSchema = z.coerce.number().int().min(1).max(100);

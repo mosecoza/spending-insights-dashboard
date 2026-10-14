@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys, DEMO_CUSTOMER_ID } from '../../lib/api';
+import { queryKeys } from '../../lib/api';
+import { useFilters } from '../../store/useFilters';
 import { getProfile } from './api';
 
 export function useProfile() {
+  const customerId = useFilters((state) => state.customerId);
   return useQuery({
-    queryKey: queryKeys.profile(DEMO_CUSTOMER_ID),
-    queryFn: getProfile,
+    queryKey: queryKeys.profile(customerId),
+    queryFn: () => getProfile(customerId),
+    enabled: customerId.length > 0,
   });
 }
