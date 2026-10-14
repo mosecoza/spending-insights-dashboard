@@ -58,3 +58,14 @@ test('switches customers and resets dashboard filters', async ({ page }) => {
   await expect(page.getByRole('combobox', { name: 'Trend months' })).toHaveValue('12');
   await expect(page).toHaveURL('/');
 });
+
+test('shows an actionable empty state when transaction filters match no rows', async ({ page }) => {
+  await page.goto('/?startDate=2020-01-01&endDate=2020-01-02&category=Groceries');
+
+  await expect(page.getByText('No transactions match these filters.')).toBeVisible();
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+
+  await expect(page.getByText('Page 1 of', { exact: false })).toBeVisible();
+  await expect(page.getByText('No transactions match these filters.')).not.toBeVisible();
+  await expect(page).toHaveURL('/');
+});

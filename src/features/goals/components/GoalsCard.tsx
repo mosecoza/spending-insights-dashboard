@@ -1,24 +1,27 @@
 import { useGoals } from '../hooks';
 import { zar } from '../../../lib/api';
+import { CardSkeleton, EmptyState, QueryError } from '../../../components/StateViews';
 
 export default function GoalsCard() {
-  const { data, isLoading, isError } = useGoals();
-  if (isLoading)
-    return (
-      <div className="card">
-        <div className="skeleton h-24" />
-      </div>
-    );
+  const { data, isLoading, isError, refetch, isFetching } = useGoals();
+  if (isLoading) return <CardSkeleton label="Loading spending goals" variant="list" rows={6} />;
   if (isError || !data)
     return (
-      <div className="card" role="alert">
-        Failed to load spending goals
-      </div>
+      <QueryError
+        title="Failed to load spending goals"
+        onRetry={() => void refetch()}
+        isRetrying={isFetching}
+      />
     );
   return (
-    <section aria-label="Spending goals" className="card">
+    <section aria-label="Spending goals" aria-busy={isFetching} className="card">
       <h2 className="font-semibold mb-2">Goals</h2>
-      {data.goals.length === 0 && <p className="text-sm text-slate-500">No spending goals set.</p>}
+      {data.goals.length === 0 && (
+        <EmptyState
+          title="No spending goals set."
+          hint="Goals appear once monthly budgets are available."
+        />
+      )}
       {data.goals.map((g) => (
         <div key={g.id} className="mb-3">
           <div className="flex justify-between text-sm">

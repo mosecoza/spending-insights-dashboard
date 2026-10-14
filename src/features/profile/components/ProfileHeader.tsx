@@ -2,25 +2,26 @@ import { useProfile } from '../hooks';
 import { zar } from '../../../lib/api';
 import { demoCustomerOptions } from '../../../lib/demoCustomers';
 import { useFilters } from '../../../store/useFilters';
+import { CardSkeleton, QueryError } from '../../../components/StateViews';
 
 export default function ProfileHeader() {
-  const { data, isLoading, isError } = useProfile();
+  const { data, isLoading, isError, refetch, isFetching } = useProfile();
   const customerId = useFilters((state) => state.customerId);
   const setCustomerId = useFilters((state) => state.setCustomerId);
-  if (isLoading)
-    return (
-      <div className="card">
-        <div className="skeleton h-6 w-48" />
-      </div>
-    );
+  if (isLoading) return <CardSkeleton label="Loading customer profile" variant="list" rows={2} />;
   if (isError || !data)
     return (
-      <div className="card" role="alert">
-        Failed to load profile
-      </div>
+      <QueryError
+        title="Failed to load profile"
+        onRetry={() => void refetch()}
+        isRetrying={isFetching}
+      />
     );
   return (
-    <header className="card flex flex-wrap justify-between items-center gap-4">
+    <header
+      className="card flex flex-wrap justify-between items-center gap-4"
+      aria-busy={isFetching}
+    >
       <div className="flex flex-wrap items-center gap-4">
         <div>
           <h1 className="text-xl font-bold">{data.name}</h1>

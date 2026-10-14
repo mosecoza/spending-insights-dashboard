@@ -2,27 +2,40 @@ import { Suspense, lazy } from 'react';
 import { useCategories } from '../hooks';
 import { zar } from '../../../lib/api';
 import { CategoryIcon } from '../../../lib/categoryIcons';
+import {
+  CardSkeleton,
+  ChartSkeleton,
+  EmptyState,
+  QueryError,
+} from '../../../components/StateViews';
 
 const CategoryDonut = lazy(() => import('./CategoryDonut'));
 
 export default function CategoriesCard() {
-  const { data, isLoading, isError } = useCategories();
+  const { data, isLoading, isError, refetch, isFetching } = useCategories();
   if (isLoading)
-    return (
-      <div className="card">
-        <div className="skeleton h-48" />
-      </div>
-    );
+    return <CardSkeleton label="Loading spending by category" variant="chart-table" rows={6} />;
   if (isError || !data)
     return (
-      <div className="card" role="alert">
-        Failed to load categories
-      </div>
+      <QueryError
+        title="Failed to load categories"
+        onRetry={() => void refetch()}
+        isRetrying={isFetching}
+      />
+    );
+  if (data.categories.length === 0 || data.totalAmount === 0)
+    return (
+      <section aria-label="Spending by category" aria-busy={isFetching} className="card">
+        <EmptyState
+          title="No category spending for this period."
+          hint="Try a longer period or clear the custom date range."
+        />
+      </section>
     );
   return (
-    <section aria-label="Spending by category" className="card">
+    <section aria-label="Spending by category" aria-busy={isFetching} className="card">
       <h2 className="font-semibold mb-2">By category • {zar(data.totalAmount)}</h2>
-      <Suspense fallback={<div className="skeleton h-48" />}>
+      <Suspense fallback={<ChartSkeleton label="Loading category spending chart" />}>
         <CategoryDonut data={data} />
       </Suspense>
       <table className="w-full text-sm mt-3">
