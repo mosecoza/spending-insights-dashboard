@@ -1,8 +1,11 @@
 import seed from './seed.json';
 import { DEMO_DATE_ANCHOR, periodDateRange, resolveDateRange } from '../lib/dateRange';
+import { DEFAULT_CUSTOMER_ID } from '../lib/api';
+import { demoCustomers, findDemoCustomer } from '../lib/demoCustomers';
 import type {
   CategoriesResponse,
   CategorySlice,
+  CustomerProfile,
   Goal,
   Period,
   SortBy,
@@ -13,6 +16,13 @@ import type {
 
 export const DEMO_TRANSACTION_COUNT = 1250;
 export const MOCK_TODAY = DEMO_DATE_ANCHOR;
+
+export function getCustomerProfile(customerId: string): CustomerProfile {
+  const customer = findDemoCustomer(customerId);
+  if (!customer) throw new Error(`Unsupported demo customer ID: ${customerId}`);
+  const { customerId: id, name, email, joinDate, accountType, totalSpent, currency } = customer;
+  return { customerId: id, name, email, joinDate, accountType, totalSpent, currency };
+}
 
 const categoryMetadata = seed.filters.categories;
 const merchantNames: Record<string, string[]> = {
@@ -25,49 +35,68 @@ const merchantNames: Record<string, string[]> = {
 };
 const paymentMethods = ['Debit Card', 'Credit Card', 'Debit Order'];
 
-export const demoTransactions: Transaction[] = Array.from(
-  { length: DEMO_TRANSACTION_COUNT },
-  (_, index) => {
-    const category = categoryMetadata[index % categoryMetadata.length];
+function createTransactions(variant: number, customerId: string): Transaction[] {
+  return Array.from({ length: DEMO_TRANSACTION_COUNT }, (_, index) => {
+    const category = categoryMetadata[(index + variant) % categoryMetadata.length];
     const date = new Date(`${MOCK_TODAY}T12:00:00.000Z`);
     date.setUTCDate(date.getUTCDate() - index);
     const merchants = merchantNames[category.name] ?? ['Local merchant'];
 
     return {
-      id: `txn_demo_${String(index + 1).padStart(4, '0')}`,
+      id: `txn_${customerId}_${String(index + 1).padStart(4, '0')}`,
       date: date.toISOString(),
-      merchant: merchants[index % merchants.length],
+      merchant: merchants[(index + variant) % merchants.length],
       category: category.name,
-      amount: (1750 + ((index * 7919) % 52500)) / 100,
+      amount: (1750 + ((index * 7919 + variant * 104729) % 52500)) / 100,
       description: `${category.name} purchase`,
       paymentMethod: paymentMethods[index % paymentMethods.length],
       icon: category.icon,
       categoryColor: category.color,
     };
-  },
+  });
+}
+
+const transactionsByCustomer = new Map(
+  demoCustomers.map((customer) => [
+    customer.customerId,
+    createTransactions(customer.transactionVariant, customer.customerId),
+  ]),
 );
+
+function getCustomerTransactions(customerId: string) {
+  const transactions = transactionsByCustomer.get(customerId);
+  if (!transactions) throw new Error(`Unsupported demo customer ID: ${customerId}`);
+  return transactions;
+}
+
+export const demoTransactions = getCustomerTransactions(DEFAULT_CUSTOMER_ID);
 
 function getPeriodWindow(period: Period) {
   return periodDateRange(period, MOCK_TODAY);
 }
 
-export function filterTransactions(filters: {
-  period?: Period;
-  startDate?: string;
-  endDate?: string;
-  category?: string;
-  sortBy: SortBy;
-}): Transaction[] {
+export function filterTransactions(
+  filters: {
+    period?: Period;
+    startDate?: string;
+    endDate?: string;
+    category?: string;
+    sortBy: SortBy;
+  },
+  customerId = DEFAULT_CUSTOMER_ID,
+): Transaction[] {
+  const customerTransactions = getCustomerTransactions(customerId);
   const range = filters.period
     ? resolveDateRange(filters.period, filters.startDate, filters.endDate, MOCK_TODAY)
     : filters.startDate || filters.endDate
       ? {
           startDate:
-            filters.startDate ?? demoTransactions[demoTransactions.length - 1].date.slice(0, 10),
+            filters.startDate ??
+            customerTransactions[customerTransactions.length - 1].date.slice(0, 10),
           endDate: filters.endDate ?? MOCK_TODAY,
         }
       : undefined;
-  const result = demoTransactions.filter((transaction) => {
+  const result = customerTransactions.filter((transaction) => {
     const date = transaction.date.slice(0, 10);
     return (
       (!range || (date >= range.startDate && date <= range.endDate)) &&
@@ -83,9 +112,9 @@ export function filterTransactions(filters: {
   });
 }
 
-export function getSummary(period: Period): SpendingSummary {
+export function getSummary(period: Period, customerId = DEFAULT_CUSTOMER_ID): SpendingSummary {
   const currentRange = getPeriodWindow(period);
-  const current = filterTransactions({ period, sortBy: 'date_desc' });
+  const current = filterTransactions({ period, sortBy: 'date_desc' }, customerId);
   const previousEnd = new Date(`${currentRange.startDate}T00:00:00.000Z`);
   previousEnd.setUTCDate(previousEnd.getUTCDate() - 1);
   const previousRange = resolveDateRange(
@@ -94,7 +123,7 @@ export function getSummary(period: Period): SpendingSummary {
     previousEnd.toISOString().slice(0, 10),
     previousEnd.toISOString().slice(0, 10),
   );
-  const previous = demoTransactions.filter((transaction) => {
+  const previous = getCustomerTransactions(customerId).filter((transaction) => {
     const date = transaction.date.slice(0, 10);
     return date >= previousRange.startDate && date <= previousRange.endDate;
   });
@@ -130,9 +159,13 @@ export function getCategories(
   period: Period,
   startDate?: string,
   endDate?: string,
+  customerId = DEFAULT_CUSTOMER_ID,
 ): CategoriesResponse {
   const range = resolveDateRange(period, startDate, endDate, MOCK_TODAY);
-  const transactions = filterTransactions({ period, startDate, endDate, sortBy: 'date_desc' });
+  const transactions = filterTransactions(
+    { period, startDate, endDate, sortBy: 'date_desc' },
+    customerId,
+  );
   const amounts = new Map<string, { amount: number; transactionCount: number }>();
   for (const transaction of transactions) {
     const item = amounts.get(transaction.category) ?? { amount: 0, transactionCount: 0 };
@@ -158,7 +191,8 @@ export function getCategories(
   };
 }
 
-export function getTrends(months: number): TrendPoint[] {
+export function getTrends(months: number, customerId = DEFAULT_CUSTOMER_ID): TrendPoint[] {
+  const customerTransactions = getCustomerTransactions(customerId);
   const latestMonth = new Date(`${MOCK_TODAY}T00:00:00.000Z`);
   latestMonth.setUTCDate(1);
   const monthKeys = Array.from({ length: months }, (_, index) => {
@@ -168,7 +202,7 @@ export function getTrends(months: number): TrendPoint[] {
   });
 
   return monthKeys.map((month) => {
-    const transactions = demoTransactions.filter((transaction) =>
+    const transactions = customerTransactions.filter((transaction) =>
       transaction.date.startsWith(month),
     );
     const totalSpent = transactions.reduce((total, transaction) => total + transaction.amount, 0);
@@ -183,9 +217,10 @@ export function getTrends(months: number): TrendPoint[] {
   });
 }
 
-export function getGoals(): { goals: Goal[] } {
+export function getGoals(customerId = DEFAULT_CUSTOMER_ID): { goals: Goal[] } {
+  const customerTransactions = getCustomerTransactions(customerId);
   const month = MOCK_TODAY.slice(0, 7);
-  const monthTransactions = demoTransactions.filter((transaction) =>
+  const monthTransactions = customerTransactions.filter((transaction) =>
     transaction.date.startsWith(month),
   );
   const budgets: Record<string, number> = {
