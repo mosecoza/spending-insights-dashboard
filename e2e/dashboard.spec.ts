@@ -42,3 +42,19 @@ test('filters transactions, paginates, and restores filter state from the URL', 
   await expect(page.getByRole('combobox', { name: 'Trend months' })).toHaveValue('12');
   await expect(page.getByText(/Page 1 of/)).toBeVisible();
 });
+
+test('switches customers and resets dashboard filters', async ({ page }) => {
+  await page.goto(
+    '/?period=90d&startDate=2024-07-01&endDate=2024-09-01&category=Groceries&months=6',
+  );
+  await expect(page.getByRole('combobox', { name: 'Customer' })).toHaveValue('12345');
+  await expect(page.getByRole('combobox', { name: 'Filter by category' })).toHaveValue('Groceries');
+
+  await page.getByRole('combobox', { name: 'Customer' }).selectOption('67890');
+
+  await expect(page.getByRole('heading', { name: 'Ayesha Khan' })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Customer' })).toHaveValue('67890');
+  await expect(page.getByRole('combobox', { name: 'Filter by category' })).toHaveValue('');
+  await expect(page.getByRole('combobox', { name: 'Trend months' })).toHaveValue('12');
+  await expect(page).toHaveURL('/');
+});
