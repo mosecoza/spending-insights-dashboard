@@ -29,7 +29,9 @@ Husky's pre-push hook runs affected unit tests before each push.
 - TypeScript strict, no `any` without comment
 - Features in `src/features/<name>/` with `api.ts`, `hooks.ts`, `components/`, and colocated `__tests__/`
 - Server state ONLY via TanStack Query. UI filters via Zustand.
+- The active customer ID is held in Zustand (default `12345`) and is not URL-backed.
 - Query keys live in `src/lib/api.ts`; each feature owns its API client and query hooks.
+- Every customer-scoped query key and endpoint must use the active customer ID.
 - URL-backed UI filters include period, custom dates, category, sort, page, page size, and trend months.
 - Currency: `Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR'})`
 - Colors/icons come from API (`color`, `icon`), map icon string -> lucide-react.
