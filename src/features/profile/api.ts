@@ -1,6 +1,7 @@
 import { api, customerApiPath } from '../../lib/api';
-import type { CustomerProfile } from '../../types/api';
+import { customerProfileSchema } from '../../lib/validation';
 
 export async function getProfile(customerId: string) {
-  return (await api.get<CustomerProfile>(customerApiPath(customerId, 'profile'))).data;
+  const response = await api.get(customerApiPath(customerId, 'profile'));
+  return customerProfileSchema.parse(response.data);
 }

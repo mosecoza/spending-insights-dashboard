@@ -70,6 +70,15 @@ describe('demo API data', () => {
     expect(summary.totalSpent).toBe(categories.totalAmount);
   });
 
+  it('always includes numeric comparison deltas for every supported period', () => {
+    for (const period of ['7d', '30d', '90d', '1y'] as const) {
+      const summary = getSummary(period);
+
+      expect(typeof summary.comparedToPrevious.spentChange).toBe('number');
+      expect(typeof summary.comparedToPrevious.transactionChange).toBe('number');
+    }
+  });
+
   it('returns the requested number of monthly trend points', () => {
     const trends = getTrends(6);
     expect(trends).toHaveLength(6);

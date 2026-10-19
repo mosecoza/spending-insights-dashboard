@@ -1,5 +1,6 @@
 import { useSummary } from '../hooks';
 import { zar } from '../../../lib/api';
+import type { ComparedToPrevious } from '../../../types/api';
 import { CardSkeleton, QueryError } from '../../../components/StateViews';
 
 export default function SummaryCards() {
@@ -13,6 +14,12 @@ export default function SummaryCards() {
         isRetrying={isFetching}
       />
     );
+  // Runtime guard: the API contract requires comparedToPrevious, but a stale
+  // cache or contract drift could omit it. Never crash on nested access.
+  const rawComparison = (data as unknown as { comparedToPrevious?: ComparedToPrevious })
+    .comparedToPrevious;
+  const compared = rawComparison ?? { spentChange: 0, transactionChange: 0 };
+  const hasComparison = rawComparison !== undefined;
   const cards = [
     { label: 'Total spent', value: zar(data.totalSpent) },
     { label: 'Transactions', value: String(data.transactionCount) },
@@ -33,11 +40,17 @@ export default function SummaryCards() {
       ))}
       <div className="card col-span-2 md:col-span-4 text-sm">
         vs previous:{' '}
-        <b className={data.comparedToPrevious.spentChange >= 0 ? 'text-red-600' : 'text-green-600'}>
-          {data.comparedToPrevious.spentChange}% spent
-        </b>
-        {' • '}
-        {data.comparedToPrevious.transactionChange}% transactions
+        {hasComparison ? (
+          <>
+            <b className={compared.spentChange >= 0 ? 'text-red-600' : 'text-green-600'}>
+              {compared.spentChange}% spent
+            </b>
+            {' • '}
+            {compared.transactionChange}% transactions
+          </>
+        ) : (
+          <span className="text-slate-500">Comparison unavailable</span>
+        )}
       </div>
     </section>
   );

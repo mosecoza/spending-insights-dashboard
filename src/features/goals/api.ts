@@ -1,6 +1,7 @@
 import { api, customerApiPath } from '../../lib/api';
-import type { Goal } from '../../types/api';
+import { goalsResponseSchema } from '../../lib/validation';
 
 export async function getGoals(customerId: string) {
-  return (await api.get<{ goals: Goal[] }>(customerApiPath(customerId, 'goals'))).data;
+  const response = await api.get(customerApiPath(customerId, 'goals'));
+  return goalsResponseSchema.parse(response.data);
 }

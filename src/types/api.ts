@@ -1,7 +1,30 @@
-// Types from CustomerSpendingInsightsEndpoints.md - single source of truth
+// Types from CustomerSpendingInsightsEndpoints.md - single source of truth.
+// These DTOs are a hand-mapped transcription of docs/API_CONTRACT.md; the
+// zod schemas in src/lib/validation.ts enforce the same shapes at runtime
+// but never generate these types (no z.infer) - see docs/ARCHITECTURE.md.
 export type Period = '7d' | '30d' | '90d' | '1y';
 export type SortBy = 'date_desc' | 'date_asc' | 'amount_desc' | 'amount_asc';
 export type GoalStatus = 'on_track' | 'warning' | 'over_budget';
+
+export interface DateRange {
+  startDate: string;
+  endDate: string;
+}
+export interface Pagination {
+  total: number;
+  limit: number;
+  offset: number;
+  hasMore: boolean;
+}
+export interface FilterCategory {
+  name: string;
+  color: string;
+  icon: string;
+}
+export interface DateRangePreset {
+  label: string;
+  value: Period;
+}
 
 export interface CustomerProfile {
   customerId: string;
@@ -12,13 +35,17 @@ export interface CustomerProfile {
   totalSpent: number;
   currency: 'ZAR';
 }
+export interface ComparedToPrevious {
+  spentChange: number;
+  transactionChange: number;
+}
 export interface SpendingSummary {
   period: Period;
   totalSpent: number;
   transactionCount: number;
   averageTransaction: number;
   topCategory: string;
-  comparedToPrevious: { spentChange: number; transactionChange: number };
+  comparedToPrevious: ComparedToPrevious;
 }
 export interface CategorySlice {
   name: string;
@@ -29,7 +56,7 @@ export interface CategorySlice {
   icon: string;
 }
 export interface CategoriesResponse {
-  dateRange: { startDate: string; endDate: string };
+  dateRange: DateRange;
   totalAmount: number;
   categories: CategorySlice[];
 }
@@ -52,7 +79,7 @@ export interface Transaction {
 }
 export interface TransactionsResponse {
   transactions: Transaction[];
-  pagination: { total: number; limit: number; offset: number; hasMore: boolean };
+  pagination: Pagination;
 }
 export interface Goal {
   id: string;
@@ -64,6 +91,6 @@ export interface Goal {
   status: GoalStatus;
 }
 export interface FiltersResponse {
-  categories: { name: string; color: string; icon: string }[];
-  dateRangePresets: { label: string; value: Period }[];
+  categories: FilterCategory[];
+  dateRangePresets: DateRangePreset[];
 }
