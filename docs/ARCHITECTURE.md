@@ -28,6 +28,14 @@ src/
 
 MSW handlers validate query parameters with Zod and return filtered, sorted, paginated data and aggregates from fixed 1,250-row fixtures. Demo customers `12345`, `67890`, and `24680` have distinct profile and spending data; unsupported customer IDs receive HTTP 404. The fixture date anchor is `2024-09-16` so mock results and tests are reproducible.
 
+## Contracts & validation
+
+`docs/API_CONTRACT.md` (transcribed from the upstream endpoint spec) is the normative source of truth. `src/types/api.ts` is its hand-mapped TypeScript transcription; the zod schemas in `src/lib/validation.ts` are the executable barrier enforcing the same shapes at runtime — never the other way around (no `z.infer`).
+
+- MSW handlers validate inbound query params; feature API clients validate outbound response payloads. Both parse against the contract.
+- Query schemas may coerce and default (for example, `z.coerce.number()`, `.default(20)`); response schemas are strict pass-throughs. Manual DTOs keep these input/output roles distinct, which inferred types would blur.
+- Drift policy: a contract change updates the DTOs, the schemas, and the per-endpoint resolve/reject tests as a single unit. The reject tests are the tripwire — if schema and contract ever disagree, a test fails.
+
 ## Perf
 
 Recharts charts are lazy-loaded; the transactions API caps each rendered page at 100 rows, so client-side virtualization is not currently needed. Routes are not code-split because the app has a single dashboard route.

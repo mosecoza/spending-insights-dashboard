@@ -1,3 +1,6 @@
+// Runtime enforcement of docs/API_CONTRACT.md. Response and query schemas mirror
+// the DTOs in src/types/api.ts by hand; types are never derived via z.infer so
+// the Markdown contract stays the normative source of truth - see docs/ARCHITECTURE.md.
 import { z } from 'zod';
 
 export const periodSchema = z.enum(['7d', '30d', '90d', '1y']);

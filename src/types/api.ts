@@ -1,4 +1,7 @@
-// Types from CustomerSpendingInsightsEndpoints.md - single source of truth
+// Types from CustomerSpendingInsightsEndpoints.md - single source of truth.
+// These DTOs are a hand-mapped transcription of docs/API_CONTRACT.md; the
+// zod schemas in src/lib/validation.ts enforce the same shapes at runtime
+// but never generate these types (no z.infer) - see docs/ARCHITECTURE.md.
 export type Period = '7d' | '30d' | '90d' | '1y';
 export type SortBy = 'date_desc' | 'date_asc' | 'amount_desc' | 'amount_asc';
 export type GoalStatus = 'on_track' | 'warning' | 'over_budget';
