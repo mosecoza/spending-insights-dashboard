@@ -57,3 +57,15 @@ export const categoriesQuerySchema = z
 export const trendsQuerySchema = z.object({
   months: z.coerce.number().int().min(1).max(24).default(12),
 });
+
+export const spendingSummarySchema = z.object({
+  period: periodSchema,
+  totalSpent: z.number(),
+  transactionCount: z.number().int().min(0),
+  averageTransaction: z.number(),
+  topCategory: z.string(),
+  comparedToPrevious: z.object({
+    spentChange: z.number(),
+    transactionChange: z.number(),
+  }),
+});
