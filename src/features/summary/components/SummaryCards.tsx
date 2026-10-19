@@ -1,24 +1,18 @@
 import { useSummary } from '../hooks';
 import { zar } from '../../../lib/api';
 import type { ComparedToPrevious } from '../../../types/api';
+import { CardSkeleton, QueryError } from '../../../components/StateViews';
 
 export default function SummaryCards() {
-  const { data, isLoading, isError } = useSummary();
-  if (isLoading)
-    return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[0, 1, 2, 3].map((i) => (
-          <div key={i} className="card">
-            <div className="skeleton h-8" />
-          </div>
-        ))}
-      </div>
-    );
+  const { data, isLoading, isError, refetch, isFetching } = useSummary();
+  if (isLoading) return <CardSkeleton label="Loading spending summary" variant="summary" />;
   if (isError || !data)
     return (
-      <div className="card" role="alert">
-        Failed to load spending summary
-      </div>
+      <QueryError
+        title="Failed to load spending summary"
+        onRetry={() => void refetch()}
+        isRetrying={isFetching}
+      />
     );
   // Runtime guard: the API contract requires comparedToPrevious, but a stale
   // cache or contract drift could omit it. Never crash on nested access.
@@ -33,7 +27,11 @@ export default function SummaryCards() {
     { label: 'Top category', value: data.topCategory },
   ];
   return (
-    <section aria-label="Spending summary" className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <section
+      aria-label="Spending summary"
+      aria-busy={isFetching}
+      className="grid grid-cols-2 md:grid-cols-4 gap-3"
+    >
       {cards.map((c) => (
         <div key={c.label} className="card">
           <p className="text-xs text-slate-500">{c.label}</p>

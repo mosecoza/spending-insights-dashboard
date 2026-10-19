@@ -10,7 +10,7 @@ src/
   store/useFilters.ts (Zustand: customerId, period, dates, category, sortBy, page, limit, months)
   features/{profile,summary,categories,trends,transactions,goals}/
     api.ts hooks.ts components/ __tests__/
-  components/FilterUrlSync.tsx, ErrorBoundary.tsx
+  components/FilterUrlSync.tsx, ErrorBoundary.tsx, StateViews.tsx (shared loading, error, and empty states)
 ```
 
 ## State split
@@ -35,6 +35,8 @@ Recharts charts are lazy-loaded; the transactions API caps each rendered page at
 ## Quality gates
 
 Vitest unit tests, Playwright filter-to-pagination E2E, ESLint, Prettier with a Husky pre-commit hook, and Lighthouse CI performance/accessibility assertions (>=90) run locally and in GitHub Actions.
+
+Feature cards use shared accessible skeleton, retryable query-error, and empty-state views. Lazy chart chunks announce their loading state; the transaction table offers a clear-filters action when the current filters return no rows.
 
 The single-page UI keeps its shared Tailwind primitives local rather than adding a generated component library.
 
