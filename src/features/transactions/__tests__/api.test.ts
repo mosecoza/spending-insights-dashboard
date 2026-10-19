@@ -5,17 +5,35 @@ import { getFilterMeta, getTransactions } from '../api';
 describe('transactions API', () => {
   afterEach(() => vi.restoreAllMocks());
 
-  it('validates pagination, filters, and sort before requesting rows', () => {
-    const get = vi.spyOn(api, 'get').mockReturnValue(new Promise(() => undefined));
-    void getTransactions({
-      customerId: '67890',
-      limit: 50,
-      offset: 100,
-      category: 'Groceries',
-      startDate: '2024-08-01',
-      endDate: '2024-08-31',
-      sortBy: 'amount_desc',
-    });
+  it('validates pagination, filters, and sort before requesting rows', async () => {
+    const payload = {
+      transactions: [
+        {
+          id: 'txn_1',
+          date: '2024-08-01T12:00:00.000Z',
+          merchant: 'Pick n Pay',
+          category: 'Groceries',
+          amount: 100,
+          description: 'Groceries purchase',
+          paymentMethod: 'Debit Card',
+          icon: 'cart',
+          categoryColor: '#000',
+        },
+      ],
+      pagination: { total: 1, limit: 50, offset: 100, hasMore: false },
+    };
+    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    await expect(
+      getTransactions({
+        customerId: '67890',
+        limit: 50,
+        offset: 100,
+        category: 'Groceries',
+        startDate: '2024-08-01',
+        endDate: '2024-08-31',
+        sortBy: 'amount_desc',
+      }),
+    ).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/67890/transactions', {
       params: {
         limit: 50,
@@ -28,9 +46,27 @@ describe('transactions API', () => {
     });
   });
 
-  it('requests filter metadata for the selected customer', () => {
-    const get = vi.spyOn(api, 'get').mockReturnValue(new Promise(() => undefined));
-    void getFilterMeta('67890');
+  it('rejects a transactions payload missing pagination', async () => {
+    vi.spyOn(api, 'get').mockResolvedValue({ data: { transactions: [] } });
+
+    await expect(
+      getTransactions({ customerId: '67890', limit: 20, offset: 0, sortBy: 'date_desc' }),
+    ).rejects.toThrow();
+  });
+
+  it('requests filter metadata for the selected customer', async () => {
+    const payload = {
+      categories: [{ name: 'Groceries', color: '#000', icon: 'cart' }],
+      dateRangePresets: [{ label: 'Last 30 days', value: '30d' }],
+    };
+    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    await expect(getFilterMeta('67890')).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/67890/filters');
+  });
+
+  it('rejects filter metadata missing the category list', async () => {
+    vi.spyOn(api, 'get').mockResolvedValue({ data: {} });
+
+    await expect(getFilterMeta('67890')).rejects.toThrow();
   });
 });

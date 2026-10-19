@@ -1,12 +1,10 @@
 import { api, customerApiPath } from '../../lib/api';
-import { trendsQuerySchema } from '../../lib/validation';
-import type { TrendPoint } from '../../types/api';
+import { trendsQuerySchema, trendsResponseSchema } from '../../lib/validation';
 
 export async function getTrends(customerId: string, months: number) {
   const filters = trendsQuerySchema.parse({ months });
-  return (
-    await api.get<{ trends: TrendPoint[] }>(customerApiPath(customerId, 'spending/trends'), {
-      params: filters,
-    })
-  ).data;
+  const response = await api.get(customerApiPath(customerId, 'spending/trends'), {
+    params: filters,
+  });
+  return trendsResponseSchema.parse(response.data);
 }

@@ -1,6 +1,6 @@
 import { api, customerApiPath } from '../../lib/api';
-import { categoriesQuerySchema } from '../../lib/validation';
-import type { CategoriesResponse, Period } from '../../types/api';
+import { categoriesQuerySchema, categoriesResponseSchema } from '../../lib/validation';
+import type { Period } from '../../types/api';
 
 export async function getCategories(filters: {
   customerId: string;
@@ -10,9 +10,8 @@ export async function getCategories(filters: {
 }) {
   const { customerId, ...query } = filters;
   const validFilters = categoriesQuerySchema.parse(query);
-  return (
-    await api.get<CategoriesResponse>(customerApiPath(customerId, 'spending/categories'), {
-      params: validFilters,
-    })
-  ).data;
+  const response = await api.get(customerApiPath(customerId, 'spending/categories'), {
+    params: validFilters,
+  });
+  return categoriesResponseSchema.parse(response.data);
 }
