@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { api } from '../../../lib/api';
+import { createAxiosResponse } from '../../../lib/testUtils';
 import { getProfile } from '../api';
 
 describe('profile API', () => {
@@ -15,13 +16,13 @@ describe('profile API', () => {
       totalSpent: 100,
       currency: 'ZAR',
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(getProfile('customer/67890')).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/customer%2F67890/profile');
   });
 
   it('rejects a profile payload missing required fields', async () => {
-    vi.spyOn(api, 'get').mockResolvedValue({ data: { customerId: '67890' } });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({ customerId: '67890' }));
 
     await expect(getProfile('67890')).rejects.toThrow();
   });

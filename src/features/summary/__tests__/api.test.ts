@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { api } from '../../../lib/api';
+import { createAxiosResponse } from '../../../lib/testUtils';
 import { getSummary } from '../api';
 
 describe('summary API', () => {
@@ -14,7 +15,7 @@ describe('summary API', () => {
       topCategory: 'Groceries',
       comparedToPrevious: { spentChange: 1.5, transactionChange: 0 },
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(getSummary('67890', '90d')).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/67890/spending/summary', {
       params: { period: '90d' },
@@ -31,7 +32,7 @@ describe('summary API', () => {
       comparedToPrevious: { spentChange: 1.5, transactionChange: 0 },
     };
     void _omitted;
-    vi.spyOn(api, 'get').mockResolvedValue({ data: partial });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(partial));
 
     await expect(getSummary('12345', '30d')).rejects.toThrow();
   });

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { api } from '../../../lib/api';
+import { createAxiosResponse } from '../../../lib/testUtils';
 import { getCategories } from '../api';
 
 describe('categories API', () => {
@@ -20,7 +21,7 @@ describe('categories API', () => {
         },
       ],
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(
       getCategories({
         customerId: '67890',
@@ -35,7 +36,7 @@ describe('categories API', () => {
   });
 
   it('rejects a categories payload missing the category list', async () => {
-    vi.spyOn(api, 'get').mockResolvedValue({ data: { totalAmount: 0 } });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({ totalAmount: 0 }));
 
     await expect(getCategories({ customerId: '67890', period: '30d' })).rejects.toThrow();
   });

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { api } from '../../../lib/api';
+import { createAxiosResponse } from '../../../lib/testUtils';
 import { getFilterMeta, getTransactions } from '../api';
 
 describe('transactions API', () => {
@@ -22,7 +23,7 @@ describe('transactions API', () => {
       ],
       pagination: { total: 1, limit: 50, offset: 100, hasMore: false },
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(
       getTransactions({
         customerId: '67890',
@@ -47,7 +48,7 @@ describe('transactions API', () => {
   });
 
   it('rejects a transactions payload missing pagination', async () => {
-    vi.spyOn(api, 'get').mockResolvedValue({ data: { transactions: [] } });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({ transactions: [] }));
 
     await expect(
       getTransactions({ customerId: '67890', limit: 20, offset: 0, sortBy: 'date_desc' }),
@@ -59,13 +60,13 @@ describe('transactions API', () => {
       categories: [{ name: 'Groceries', color: '#000', icon: 'cart' }],
       dateRangePresets: [{ label: 'Last 30 days', value: '30d' }],
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(getFilterMeta('67890')).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/67890/filters');
   });
 
   it('rejects filter metadata missing the category list', async () => {
-    vi.spyOn(api, 'get').mockResolvedValue({ data: {} });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({}));
 
     await expect(getFilterMeta('67890')).rejects.toThrow();
   });

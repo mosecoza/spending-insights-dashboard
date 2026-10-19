@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { api } from '../../../lib/api';
+import { createAxiosResponse } from '../../../lib/testUtils';
 import { getGoals } from '../api';
 
 describe('goals API', () => {
@@ -19,13 +20,13 @@ describe('goals API', () => {
         },
       ],
     };
-    const get = vi.spyOn(api, 'get').mockResolvedValue({ data: payload });
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
     await expect(getGoals('67890')).resolves.toEqual(payload);
     expect(get).toHaveBeenCalledWith('/customers/67890/goals');
   });
 
   it('rejects a goals payload missing the goals list', async () => {
-    vi.spyOn(api, 'get').mockResolvedValue({ data: {} });
+    vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({}));
 
     await expect(getGoals('67890')).rejects.toThrow();
   });
