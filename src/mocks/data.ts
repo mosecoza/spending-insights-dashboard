@@ -1,5 +1,10 @@
 import seed from './seed.json';
-import { DEMO_DATE_ANCHOR, periodDateRange, resolveDateRange } from '../lib/dateRange';
+import {
+  DEMO_DATE_ANCHOR,
+  DEMO_TRANSACTION_COUNT,
+  periodDateRange,
+  resolveDateRange,
+} from '../lib/dateRange';
 import { DEFAULT_CUSTOMER_ID } from '../lib/api';
 import { demoCustomers, findDemoCustomer } from '../lib/demoCustomers';
 import type {
@@ -14,7 +19,7 @@ import type {
   TrendPoint,
 } from '../types/api';
 
-export const DEMO_TRANSACTION_COUNT = 1250;
+export { DEMO_TRANSACTION_COUNT };
 export const MOCK_TODAY = DEMO_DATE_ANCHOR;
 
 export function getCustomerProfile(customerId: string): CustomerProfile {
