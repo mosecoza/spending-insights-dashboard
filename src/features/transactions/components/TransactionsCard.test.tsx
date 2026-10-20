@@ -45,8 +45,8 @@ describe('TransactionsCard empty and filter metadata states', () => {
   it('shows an actionable no-results message and filter-option retry', () => {
     const html = renderToString(createElement(TransactionsCard));
 
-    expect(html).toContain('No transactions match these filters.');
-    expect(html).toContain('Clear filters');
+    expect(html).toContain('No transactions found matching your selected filters.');
+    expect(html).toContain('Clear all filters');
     expect(html).toContain('Could not load category filter options.');
     expect(html).toContain('Retry category options');
   });
