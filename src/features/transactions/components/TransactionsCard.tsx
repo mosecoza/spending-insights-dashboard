@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
+import { UI_STRINGS } from '../../../constants/copy';
 import { useTransactions, useFilterMeta } from '../hooks';
 import { useFilters } from '../../../store/useFilters';
-import { zar } from '../../../lib/api';
+import { formatDateSA, zar } from '../../../lib/api';
 import { categorySchema, sortBySchema, transactionLimitSchema } from '../../../lib/validation';
 import { CategoryIcon } from '../../../lib/categoryIcons';
 import { CardSkeleton, EmptyState, QueryError } from '../../../components/StateViews';
@@ -35,16 +36,18 @@ export default function TransactionsCard() {
   }
   return (
     <section aria-label="Transactions" aria-busy={isFetching} className="card">
+      <h2 className="font-semibold text-default mb-3">{UI_STRINGS.transactions.title}</h2>
       <div className="flex flex-wrap gap-2 mb-3">
         <select
           aria-label="Filter by category"
+          className="rounded-xl border border-border-default bg-surface-white px-3 py-1.5 text-sm shadow-sm"
           value={category ?? ''}
           onChange={(e) => {
             const nextCategory = e.target.value ? categorySchema.parse(e.target.value) : undefined;
             set({ category: nextCategory, page: 0 });
           }}
         >
-          <option value="">All categories</option>
+          <option value="">{UI_STRINGS.transactions.filterAll}</option>
           {(meta?.categories ?? []).map((c) => (
             <option key={c.name} value={c.name}>
               {c.name}
@@ -53,18 +56,20 @@ export default function TransactionsCard() {
         </select>
         <select
           aria-label="Sort"
+          className="rounded-xl border border-border-default bg-surface-white px-3 py-1.5 text-sm shadow-sm"
           value={sortBy}
           onChange={(e) => set({ sortBy: sortBySchema.parse(e.target.value), page: 0 })}
         >
-          <option value="date_desc">Newest</option>
-          <option value="date_asc">Oldest</option>
-          <option value="amount_desc">Amount high</option>
-          <option value="amount_asc">Amount low</option>
+          <option value="date_desc">{UI_STRINGS.transactions.sortNewest}</option>
+          <option value="date_asc">{UI_STRINGS.transactions.sortOldest}</option>
+          <option value="amount_desc">{UI_STRINGS.transactions.sortHighest}</option>
+          <option value="amount_asc">{UI_STRINGS.transactions.sortLowest}</option>
         </select>
-        <label className="flex items-center gap-2 text-sm">
-          <span>Rows per page</span>
+        <label className="flex items-center gap-2 text-sm font-medium text-secondary">
+          <span>{UI_STRINGS.transactions.rowsPerPage}</span>
           <select
             aria-label="Rows per page"
+            className="rounded-xl border border-border-default bg-surface-white px-2 py-1.5 shadow-sm"
             value={limit}
             onChange={(event) => {
               const nextLimit = transactionLimitSchema.parse(event.target.value);
@@ -78,7 +83,7 @@ export default function TransactionsCard() {
         </label>
       </div>
       {isMetaError && (
-        <div role="alert" className="mb-3 text-sm text-red-700">
+        <div role="alert" className="mb-3 text-sm text-error-default">
           <p>Could not load category filter options.</p>
           <button
             type="button"
@@ -93,9 +98,9 @@ export default function TransactionsCard() {
       {data.transactions.length === 0 ? (
         <div className="mt-2">
           <EmptyState
-            title="No transactions match these filters."
-            hint="Try clearing the category or custom date range."
-            actionLabel="Clear filters"
+            title={UI_STRINGS.transactions.emptyState}
+            hint={UI_STRINGS.transactions.emptyStateHint}
+            actionLabel={UI_STRINGS.transactions.clearFilters}
             onAction={clearTransactionFilters}
           />
         </div>
@@ -103,23 +108,31 @@ export default function TransactionsCard() {
         <table className="w-full text-sm">
           <caption className="sr-only">Transactions for the selected filters</caption>
           <thead>
-            <tr className="text-left text-slate-500">
-              <th scope="col">Date</th>
-              <th scope="col">Merchant</th>
-              <th scope="col">Category</th>
-              <th scope="col">Amount</th>
+            <tr className="text-left text-xs font-semibold uppercase tracking-wider text-muted">
+              <th scope="col" className="pb-2">
+                Date
+              </th>
+              <th scope="col" className="pb-2">
+                Merchant
+              </th>
+              <th scope="col" className="pb-2">
+                Category
+              </th>
+              <th scope="col" className="pb-2 text-right">
+                Amount
+              </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-border-subtle">
             {data.transactions.map((t) => (
               <tr
                 key={t.id}
                 tabIndex={0}
-                className="border-t focus-visible:outline focus-visible:outline-2"
+                className="hover:bg-surface-subtle-80 transition-colors focus-visible:outline focus-visible:outline-2"
               >
-                <td>{new Date(t.date).toLocaleDateString()}</td>
-                <td>{t.merchant}</td>
-                <td>
+                <td className="py-2 text-secondary">{formatDateSA(t.date)}</td>
+                <td className="py-2 font-medium text-default">{t.merchant}</td>
+                <td className="py-2 text-secondary">
                   <CategoryIcon
                     name={t.icon}
                     className="inline size-4"
@@ -127,28 +140,28 @@ export default function TransactionsCard() {
                   />{' '}
                   {t.category}
                 </td>
-                <td>{zar(t.amount)}</td>
+                <td className="py-2 text-right font-semibold text-default">{zar(t.amount)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
       {data.transactions.length > 0 && (
-        <div className="flex gap-2 mt-3 items-center">
+        <div className="flex flex-wrap gap-2 mt-4 items-center">
           <button
             disabled={page === 0}
             onClick={() => set({ page: page - 1 })}
-            className="px-3 py-1 border rounded disabled:opacity-40"
+            className="px-4 py-1.5 border border-border-default rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow disabled:opacity-40 bg-surface-white"
           >
             Prev
           </button>
-          <span className="text-sm">
-            Page {page + 1} of {totalPages} • {data.pagination.total} total
+          <span className="text-sm text-secondary">
+            {UI_STRINGS.transactions.paginationInfo(page + 1, totalPages, data.pagination.total)}
           </span>
           <button
             disabled={!data.pagination.hasMore}
             onClick={() => set({ page: page + 1 })}
-            className="px-3 py-1 border rounded disabled:opacity-40"
+            className="px-4 py-1.5 border border-border-default rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow disabled:opacity-40 bg-surface-white"
           >
             Next
           </button>

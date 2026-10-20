@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react';
+import { UI_STRINGS } from '../../../constants/copy';
 import { useCategories } from '../hooks';
 import { zar } from '../../../lib/api';
 import { CategoryIcon } from '../../../lib/categoryIcons';
@@ -34,30 +35,41 @@ export default function CategoriesCard() {
     );
   return (
     <section aria-label="Spending by category" aria-busy={isFetching} className="card">
-      <h2 className="font-semibold mb-2">By category • {zar(data.totalAmount)}</h2>
+      <div className="flex items-baseline justify-between gap-2 mb-3">
+        <h2 className="font-semibold text-default">{UI_STRINGS.categories.title}</h2>
+        <p className="text-sm font-bold text-default">{zar(data.totalAmount)}</p>
+      </div>
       <Suspense fallback={<ChartSkeleton label="Loading category spending chart" />}>
         <CategoryDonut data={data} />
       </Suspense>
       <table className="w-full text-sm mt-3">
         <caption className="sr-only">Spending totals by category</caption>
         <thead>
-          <tr className="text-left text-slate-500">
-            <th scope="col">Category</th>
-            <th scope="col">Amount</th>
-            <th scope="col">%</th>
-            <th scope="col">Transactions</th>
+          <tr className="text-left text-xs font-semibold uppercase tracking-wider text-muted">
+            <th scope="col" className="pb-2">
+              {UI_STRINGS.categories.tableHeaderCategory}
+            </th>
+            <th scope="col" className="pb-2 text-right">
+              {UI_STRINGS.categories.tableHeaderAmount}
+            </th>
+            <th scope="col" className="pb-2 text-right">
+              {UI_STRINGS.categories.tableHeaderShare}
+            </th>
+            <th scope="col" className="pb-2 text-right">
+              {UI_STRINGS.categories.tableHeaderCount}
+            </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-border-subtle">
           {data.categories.map((c) => (
-            <tr key={c.name} className="border-t">
-              <td>
+            <tr key={c.name} className="hover:bg-surface-subtle-80 transition-colors">
+              <td className="py-2 font-medium text-default">
                 <CategoryIcon name={c.icon} className="inline size-4" style={{ color: c.color }} />{' '}
                 {c.name}
               </td>
-              <td>{zar(c.amount)}</td>
-              <td>{c.percentage}%</td>
-              <td>{c.transactionCount}</td>
+              <td className="py-2 text-right font-semibold">{zar(c.amount)}</td>
+              <td className="py-2 text-right text-secondary">{c.percentage}%</td>
+              <td className="py-2 text-right text-secondary">{c.transactionCount}</td>
             </tr>
           ))}
         </tbody>

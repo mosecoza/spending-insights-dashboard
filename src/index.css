@@ -2,12 +2,199 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Design tokens (single source of truth; see src/constants/colors.ts) ──
+   Naming is role-based: surface / text / border / success / warning / danger / error
+   Variants: subtle | default | strong | light ── */
+:root {
+  /* ── Surface ── */
+  --color-surface-white: #ffffff;
+  --color-surface-canvas: rgba(248, 250, 252, 0.6);
+  --color-surface-subtle: #f8fafc;
+  --color-surface-default: #f1f5f9;
+  --color-surface-muted: #e2e8f0;
+  --color-surface-dark: #0f172a;
+
+  /* ── Text ── */
+  --color-text-default: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #cbd5e1;
+  --color-text-inverse: #ffffff;
+
+  /* ── Success ── */
+  --color-success-subtle: #ecfdf5;
+  --color-success-default: #10b981;
+  --color-success-strong: #059669;
+  --color-success-light: #6ee7b7;
+
+  /* ── Warning ── */
+  --color-warning-subtle: #fffbeb;
+  --color-warning-default: #f59e0b;
+  --color-warning-strong: #a16207;
+
+  /* ── Danger ── */
+  --color-danger-subtle: #fff1f2;
+  --color-danger-default: #f43f5e;
+  --color-danger-strong: #be123c;
+  --color-danger-light: #fb7185;
+
+  /* ── Error (critical) ── */
+  --color-error-subtle: #fecaca;
+  --color-error-default: #b91c1c;
+
+  /* ── Border ── */
+  --color-border-subtle: #e2e8f0;
+  --color-border-default: #cbd5e1;
+  --color-border-dark: #0f172a;
+}
+
+/* ── Base overrides using tokens ── */
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply antialiased;
+  background-color: var(--color-surface-canvas);
+  color: var(--color-text-default);
+  min-height: 100vh;
 }
 .card {
-  @apply bg-white rounded-2xl shadow-sm border border-slate-200 p-5;
+  @apply rounded-2xl shadow-sm hover:shadow-md transition-shadow p-5;
+  background-color: var(--color-surface-white);
+  border: 1px solid var(--color-border-subtle);
 }
 .skeleton {
-  @apply animate-pulse bg-slate-200 rounded;
+  @apply animate-pulse rounded;
+  background-color: var(--color-surface-muted);
+}
+
+/* ── Background tokens ── */
+.bg-surface-white {
+  background-color: var(--color-surface-white);
+}
+.bg-surface-canvas {
+  background-color: var(--color-surface-canvas);
+}
+.bg-surface-subtle {
+  background-color: var(--color-surface-subtle);
+}
+.bg-surface-subtle-80 {
+  background-color: rgba(248, 250, 252, 0.8);
+}
+.bg-surface-default {
+  background-color: var(--color-surface-default);
+}
+.bg-surface-muted {
+  background-color: var(--color-surface-muted);
+}
+.bg-surface-dark {
+  background-color: var(--color-surface-dark);
+}
+.bg-success-subtle {
+  background-color: var(--color-success-subtle);
+}
+.bg-success-default {
+  background-color: var(--color-success-default);
+}
+.bg-success-default-20 {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+.bg-warning-subtle {
+  background-color: var(--color-warning-subtle);
+}
+.bg-warning-default {
+  background-color: var(--color-warning-default);
+}
+.bg-danger-subtle {
+  background-color: var(--color-danger-subtle);
+}
+.bg-danger-default {
+  background-color: var(--color-danger-default);
+}
+.bg-danger-default-20 {
+  background-color: rgba(244, 63, 94, 0.2);
+}
+
+/* ── Text tokens ── */
+.text-default {
+  color: var(--color-text-default);
+}
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
+.text-subtle {
+  color: var(--color-text-subtle);
+}
+.text-inverse {
+  color: var(--color-text-inverse);
+}
+.text-error-default {
+  color: var(--color-error-default);
+}
+.text-success-strong {
+  color: var(--color-success-strong);
+}
+.text-success-light {
+  color: var(--color-success-light);
+}
+.text-warning-strong {
+  color: var(--color-warning-strong);
+}
+.text-danger-strong {
+  color: var(--color-danger-strong);
+}
+.text-danger-light {
+  color: var(--color-danger-light);
+}
+
+/* ── Border tokens ── */
+.border-surface-white {
+  border-color: var(--color-surface-white);
+}
+.border-border-subtle {
+  border-color: var(--color-border-subtle);
+}
+.border-border-default {
+  border-color: var(--color-border-default);
+}
+.border-border-dark {
+  border-color: var(--color-border-dark);
+}
+.border-error-subtle {
+  border-color: var(--color-error-subtle);
+}
+.border-error-default {
+  border-color: var(--color-error-default);
+}
+.border-success-subtle {
+  border-color: var(--color-success-subtle);
+}
+.border-warning-subtle {
+  border-color: var(--color-warning-subtle);
+}
+.border-danger-subtle {
+  border-color: var(--color-danger-subtle);
+}
+
+/* ── Ring tokens ── */
+.ring-surface-dark-10 {
+  --tw-ring-color: rgba(15, 23, 42, 0.1);
+}
+
+/* ── Divide tokens ── */
+.divide-border-subtle {
+  --tw-divide-color: var(--color-border-subtle);
+}
+
+/* ── Gradient tokens ── */
+.gradient-surface-dark {
+  background-image: linear-gradient(to right, var(--color-surface-dark), #1e293b);
+}
+.gradient-surface-header {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--color-surface-white),
+    var(--color-surface-white),
+    rgba(248, 250, 252, 0.8)
+  );
 }

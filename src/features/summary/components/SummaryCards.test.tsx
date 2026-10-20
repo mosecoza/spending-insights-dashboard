@@ -48,9 +48,9 @@ describe('SummaryCards comparison fallback', () => {
     const html = renderToString(createElement(SummaryCards));
     const text = html.replace(/<!-- -->/g, '');
 
-    expect(text).toContain('5.2% spent');
+    expect(text).toContain('5.2% more spent');
     expect(text).toContain('-1.1% transactions');
-    expect(text).toContain('Total spent');
+    expect(text).toContain('Total Spent');
   });
 
   it('renders without crashing when comparedToPrevious is missing', () => {
@@ -67,7 +67,7 @@ describe('SummaryCards comparison fallback', () => {
       html = renderToString(createElement(SummaryCards));
     }).not.toThrow();
 
-    expect(html).toContain('Total spent');
+    expect(html).toContain('Total Spent');
     expect(html).toContain('Comparison unavailable');
   });
 });

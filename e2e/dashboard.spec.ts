@@ -4,10 +4,13 @@ test('filters transactions, paginates, and restores filter state from the URL', 
   page,
 }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Monthly trends' })).toBeVisible();
-  await page.getByRole('tab', { name: '30d' }).focus();
+  await expect(page.getByRole('heading', { name: 'Monthly Spending Trends' })).toBeVisible();
+  await page.getByRole('tab', { name: 'Last 30 Days' }).focus();
   await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('tab', { name: '90d' })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('tab', { name: 'Past 90 Days' })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
   await expect(page).toHaveURL(/period=90d/);
   await page.getByRole('combobox', { name: 'Trend months' }).selectOption('6');
   await expect(page).toHaveURL(/months=6/);
@@ -47,13 +50,13 @@ test('switches customers and resets dashboard filters', async ({ page }) => {
   await page.goto(
     '/?period=90d&startDate=2024-07-01&endDate=2024-09-01&category=Groceries&months=6',
   );
-  await expect(page.getByRole('combobox', { name: 'Customer' })).toHaveValue('12345');
+  await expect(page.getByRole('combobox', { name: 'Active Profile' })).toHaveValue('12345');
   await expect(page.getByRole('combobox', { name: 'Filter by category' })).toHaveValue('Groceries');
 
-  await page.getByRole('combobox', { name: 'Customer' }).selectOption('67890');
+  await page.getByRole('combobox', { name: 'Active Profile' }).selectOption('67890');
 
   await expect(page.getByRole('heading', { name: 'Ayesha Khan' })).toBeVisible();
-  await expect(page.getByRole('combobox', { name: 'Customer' })).toHaveValue('67890');
+  await expect(page.getByRole('combobox', { name: 'Active Profile' })).toHaveValue('67890');
   await expect(page.getByRole('combobox', { name: 'Filter by category' })).toHaveValue('');
   await expect(page.getByRole('combobox', { name: 'Trend months' })).toHaveValue('12');
   await expect(page).toHaveURL('/');
@@ -62,10 +65,14 @@ test('switches customers and resets dashboard filters', async ({ page }) => {
 test('shows an actionable empty state when transaction filters match no rows', async ({ page }) => {
   await page.goto('/?startDate=2020-01-01&endDate=2020-01-02&category=Groceries');
 
-  await expect(page.getByText('No transactions match these filters.')).toBeVisible();
-  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await expect(
+    page.getByText('No transactions found matching your selected filters.'),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Clear all filters' }).click();
 
   await expect(page.getByText('Page 1 of', { exact: false })).toBeVisible();
-  await expect(page.getByText('No transactions match these filters.')).not.toBeVisible();
+  await expect(
+    page.getByText('No transactions found matching your selected filters.'),
+  ).not.toBeVisible();
   await expect(page).toHaveURL('/');
 });

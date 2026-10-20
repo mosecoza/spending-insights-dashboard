@@ -12,11 +12,11 @@ class ErrorInner extends Component<{ children: ReactNode }, { err?: string }> {
   render() {
     if (this.state.err)
       return (
-        <div role="alert" className="card border-red-300">
-          <h2 className="font-semibold text-red-700">Something went wrong</h2>
-          <p className="text-sm text-slate-600">{this.state.err}</p>
+        <div role="alert" className="card border-error-default">
+          <h2 className="font-semibold text-error-default">Something went wrong</h2>
+          <p className="text-sm text-secondary">{this.state.err}</p>
           <button
-            className="mt-3 px-3 py-1 rounded bg-slate-900 text-white"
+            className="mt-3 px-3 py-1 rounded bg-surface-dark text-inverse"
             onClick={() => window.location.reload()}
           >
             Reload
