@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react';
+import { UI_STRINGS } from '../../../constants/copy';
 import { useTrends } from '../hooks';
 import { useFilters } from '../../../store/useFilters';
 import { trendsQuerySchema } from '../../../lib/validation';
@@ -26,10 +27,10 @@ export default function TrendsCard() {
     );
   return (
     <section aria-label="Monthly trends" aria-busy={isFetching} className="card">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="font-semibold">Monthly trends</h2>
-        <label className="flex items-center gap-2 text-sm">
-          <span>Months</span>
+      <div className="flex justify-between items-center gap-2 mb-3">
+        <h2 className="font-semibold text-default">{UI_STRINGS.trends.title}</h2>
+        <label className="flex items-center gap-2 text-sm font-medium text-secondary">
+          <span>{UI_STRINGS.trends.monthsLabel}</span>
           <select
             aria-label="Trend months"
             value={months}
@@ -37,10 +38,11 @@ export default function TrendsCard() {
               const nextMonths = trendsQuerySchema.shape.months.parse(event.target.value);
               set({ months: nextMonths });
             }}
+            className="rounded-xl border border-border-default bg-surface-white px-2 py-1 shadow-sm text-sm focus:outline-none focus:ring-2 ring-surface-dark-10"
           >
-            <option value={6}>6</option>
-            <option value={12}>12</option>
-            <option value={24}>24</option>
+            <option value={6}>6 {UI_STRINGS.trends.monthsSuffix}</option>
+            <option value={12}>12 {UI_STRINGS.trends.monthsSuffix}</option>
+            <option value={24}>24 {UI_STRINGS.trends.monthsSuffix}</option>
           </select>
         </label>
       </div>

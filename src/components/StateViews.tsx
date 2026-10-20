@@ -96,16 +96,16 @@ interface QueryErrorProps {
 
 export function QueryError({ title, detail, onRetry, isRetrying = false }: QueryErrorProps) {
   return (
-    <div className="card border-red-200" role="alert">
-      <h2 className="font-semibold text-red-700">{title}</h2>
-      <p className="text-sm text-slate-600 mt-1">
+    <div className="card border-error-subtle" role="alert">
+      <h2 className="font-semibold text-error-default">{title}</h2>
+      <p className="text-sm text-secondary mt-1">
         {detail ?? 'Check your connection and try again.'}
       </p>
       <button
         type="button"
         onClick={onRetry}
         disabled={isRetrying}
-        className="mt-3 px-3 py-1 rounded bg-slate-900 text-white disabled:opacity-50"
+        className="mt-3 px-3 py-1 rounded bg-surface-dark text-inverse disabled:opacity-50"
       >
         {isRetrying ? 'Retrying…' : 'Try again'}
       </button>
@@ -123,8 +123,8 @@ interface EmptyStateProps {
 export function EmptyState({ title, hint, actionLabel, onAction }: EmptyStateProps) {
   return (
     <div aria-live="polite">
-      <p className="text-sm font-medium text-slate-700">{title}</p>
-      {hint ? <p className="text-sm text-slate-500 mt-1">{hint}</p> : null}
+      <p className="text-sm font-medium text-secondary">{title}</p>
+      {hint ? <p className="text-sm text-muted mt-1">{hint}</p> : null}
       {actionLabel && onAction ? (
         <button type="button" onClick={onAction} className="mt-3 px-3 py-1 border rounded">
           {actionLabel}
