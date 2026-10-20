@@ -24,8 +24,6 @@ export const useFilters = create<FilterState>((set) => ({
       if (validatedCustomerId === state.customerId) return state;
       return {
         ...parseFilterSearch(''),
-        startDate: undefined,
-        endDate: undefined,
         category: undefined,
         customerId: validatedCustomerId,
       };

@@ -1,4 +1,5 @@
 import { api, customerApiPath } from 'Lib/api';
+import { completeDateRange } from 'Lib/dateRange';
 import {
   filtersResponseSchema,
   transactionsQuerySchema,
@@ -17,8 +18,15 @@ export async function getTransactions(filters: {
 }) {
   const { customerId, ...query } = filters;
   const validFilters = transactionsQuerySchema.parse(query);
+  const dateRange = completeDateRange(validFilters.startDate, validFilters.endDate);
   const response = await api.get(customerApiPath(customerId, 'transactions'), {
-    params: validFilters,
+    params: {
+      limit: validFilters.limit,
+      offset: validFilters.offset,
+      category: validFilters.category,
+      ...dateRange,
+      sortBy: validFilters.sortBy,
+    },
   });
   return transactionsResponseSchema.parse(response.data);
 }

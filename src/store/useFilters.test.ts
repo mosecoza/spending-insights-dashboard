@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { DEFAULT_DATE_RANGE } from 'Lib/dateRange';
 import { useFilters } from './useFilters';
 
 describe('active customer state', () => {
   afterEach(() => {
     useFilters.getState().set({
       period: '30d',
-      startDate: undefined,
-      endDate: undefined,
+      ...DEFAULT_DATE_RANGE,
       category: undefined,
       sortBy: 'date_desc',
       page: 0,
@@ -38,8 +38,7 @@ describe('active customer state', () => {
     expect(useFilters.getState()).toMatchObject({
       customerId: '67890',
       period: '30d',
-      startDate: undefined,
-      endDate: undefined,
+      ...DEFAULT_DATE_RANGE,
       category: undefined,
       sortBy: 'date_desc',
       page: 0,
@@ -60,8 +59,7 @@ describe('active customer state', () => {
     expect(useFilters.getState()).toMatchObject({
       customerId: '67890',
       category: undefined,
-      startDate: undefined,
-      endDate: undefined,
+      ...DEFAULT_DATE_RANGE,
     });
   });
 
@@ -73,6 +71,10 @@ describe('active customer state', () => {
       period: '90d',
       page: 2,
     });
+  });
+
+  it('starts with the default date range', () => {
+    expect(useFilters.getState()).toMatchObject(DEFAULT_DATE_RANGE);
   });
 
   it('rejects an empty customer ID', () => {

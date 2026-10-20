@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { DEFAULT_DATE_RANGE } from 'Lib/dateRange';
 import { useFilters } from 'Store/useFilters';
 import { syncFiltersFromSearch } from './FilterUrlSync';
 
@@ -8,8 +9,7 @@ describe('filter URL synchronization', () => {
     useFilters.getState().setCustomerId(DEFAULT_CUSTOMER_ID);
     useFilters.getState().set({
       period: '30d',
-      startDate: undefined,
-      endDate: undefined,
+      ...DEFAULT_DATE_RANGE,
       category: undefined,
       sortBy: 'date_desc',
       page: 0,
@@ -32,8 +32,7 @@ describe('filter URL synchronization', () => {
       customerId: '67890',
       period: '90d',
       category: undefined,
-      startDate: undefined,
-      endDate: undefined,
+      ...DEFAULT_DATE_RANGE,
     });
   });
 });
