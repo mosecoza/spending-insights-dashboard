@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { customerApiPath, queryKeys, zar } from '../lib/api';
+import { customerApiPath, parseDateSA, queryKeys, zar } from '../lib/api';
 
 describe('zar formatting', () => {
   it('formats ZAR amounts', () => {
@@ -12,6 +12,24 @@ describe('pagination math', () => {
   it('computes total pages', () => {
     expect(Math.ceil(1250 / 20)).toBe(63);
     expect(Math.ceil(0 / 20)).toBe(0);
+  });
+});
+
+describe('South African date parsing', () => {
+  it('parses a valid calendar date independently of the local timezone', () => {
+    expect(parseDateSA('16/09/2024')).toBe('2024-09-16');
+  });
+
+  it.each(['31/04/2024', '29/02/2023', '00/01/2024', '01/13/2024'])(
+    'rejects invalid calendar date %s',
+    (value) => {
+      expect(parseDateSA(value)).toBeNull();
+    },
+  );
+
+  it('rejects values outside dd/mm/yyyy format', () => {
+    expect(parseDateSA('2024-09-16')).toBeNull();
+    expect(parseDateSA('1/09/2024')).toBeNull();
   });
 });
 

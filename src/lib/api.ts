@@ -59,7 +59,7 @@ export function parseDateSA(value: string): string | null {
   if (!match) return null;
   const [, day, month, year] = match;
   const iso = `${year}-${month}-${day}`;
-  const parsed = new Date(`${iso}T00:00:00`);
+  const parsed = new Date(`${iso}T00:00:00.000Z`);
   if (Number.isNaN(parsed.getTime())) return null;
   if (
     parsed.getUTCDate() !== Number(day) ||
