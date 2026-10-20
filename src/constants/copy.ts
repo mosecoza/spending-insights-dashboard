@@ -1,0 +1,66 @@
+export const UI_STRINGS = {
+  header: {
+    welcomeSubtitle: 'Personalized financial analytics and spending overview',
+    customerSelectLabel: 'Active Profile',
+    totalSpentBadge: 'Lifetime Spend',
+  },
+  filters: {
+    presets: {
+      '7d': 'Last 7 Days',
+      '30d': 'Last 30 Days',
+      '90d': 'Past 90 Days',
+      '1y': 'Past Year',
+    } as Record<string, string>,
+    dateRangeLabel: 'Custom Date Range',
+    from: 'From',
+    to: 'To',
+    clearDates: 'Reset Dates',
+  },
+  summary: {
+    totalSpent: 'Total Spent',
+    transactionCount: 'Total Transactions',
+    averageTxn: 'Average per Transaction',
+    topCategory: 'Primary Spending Category',
+    comparisonPrefix: 'vs previous period:',
+    lessSpent: (val: string) => `${val} less spent`,
+    moreSpent: (val: string) => `${val} more spent`,
+    spendUnchanged: 'Spending unchanged',
+    txnChange: (val: string) => `${val} transactions`,
+  },
+  categories: {
+    title: 'Spending by Category',
+    tableHeaderCategory: 'Category',
+    tableHeaderAmount: 'Total Amount',
+    tableHeaderShare: 'Share of Spend',
+    tableHeaderCount: 'Transactions',
+  },
+  trends: {
+    title: 'Monthly Spending Trends',
+    monthsLabel: 'Timeframe',
+    monthsSuffix: 'Months',
+  },
+  transactions: {
+    title: 'Recent Transactions',
+    searchPlaceholder: 'Search merchants or categories...',
+    filterAll: 'All Categories',
+    sortNewest: 'Newest First',
+    sortOldest: 'Oldest First',
+    sortHighest: 'Highest Amount',
+    sortLowest: 'Lowest Amount',
+    rowsPerPage: 'Rows per page',
+    paginationInfo: (current: number, total: number, count: number) =>
+      `Page ${current} of ${total} (${count} total records)`,
+    emptyState: 'No transactions found matching your selected filters.',
+    emptyStateHint: 'Try clearing the category or custom date range.',
+    clearFilters: 'Clear all filters',
+  },
+  goals: {
+    title: 'Budget Goals & Limits',
+    remainingDays: (days: number) => `${days} days remaining in cycle`,
+    status: {
+      on_track: 'On Track',
+      warning: 'Approaching Limit',
+      over_budget: 'Exceeded Budget',
+    } as Record<string, string>,
+  },
+} as const;
