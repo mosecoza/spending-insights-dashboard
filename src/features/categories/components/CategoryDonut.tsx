@@ -1,5 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { CategoriesResponse } from '../../../types/api';
+import { zar } from '../../../lib/api';
 
 export default function CategoryDonut({ data }: { data: CategoriesResponse }) {
   return (
@@ -17,7 +18,7 @@ export default function CategoryDonut({ data }: { data: CategoriesResponse }) {
               <Cell key={c.name} fill={c.color} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip formatter={(value) => zar(Number(value))} />
         </PieChart>
       </ResponsiveContainer>
     </div>
