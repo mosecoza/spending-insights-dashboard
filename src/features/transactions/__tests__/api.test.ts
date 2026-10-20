@@ -47,6 +47,36 @@ describe('transactions API', () => {
     });
   });
 
+  it('omits incomplete ranges and rejects dates outside fixture bounds', async () => {
+    const payload = {
+      transactions: [],
+      pagination: { total: 0, limit: 20, offset: 0, hasMore: false },
+    };
+    const get = vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse(payload));
+    await getTransactions({
+      customerId: '67890',
+      limit: 20,
+      offset: 0,
+      startDate: '2024-09-01',
+      sortBy: 'date_desc',
+    });
+
+    expect(get).toHaveBeenCalledWith('/customers/67890/transactions', {
+      params: { limit: 20, offset: 0, sortBy: 'date_desc' },
+    });
+    await expect(
+      getTransactions({
+        customerId: '67890',
+        limit: 20,
+        offset: 0,
+        endDate: '2024-09-16',
+        startDate: '2020-12-31',
+        sortBy: 'date_desc',
+      }),
+    ).rejects.toThrow();
+    expect(get).toHaveBeenCalledTimes(1);
+  });
+
   it('rejects a transactions payload missing pagination', async () => {
     vi.spyOn(api, 'get').mockResolvedValue(createAxiosResponse({ transactions: [] }));
 

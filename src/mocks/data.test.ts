@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  DEMO_TRANSACTION_COUNT,
   demoTransactions,
   filterTransactions,
   getCategories,
@@ -36,8 +37,10 @@ describe('demo API data', () => {
     const firstPage = allTransactions.slice(0, 20);
     const secondPage = allTransactions.slice(20, 40);
 
-    expect(demoTransactions).toHaveLength(1250);
-    expect(allTransactions).toHaveLength(1250);
+    expect(demoTransactions).toHaveLength(DEMO_TRANSACTION_COUNT);
+    expect(allTransactions).toHaveLength(DEMO_TRANSACTION_COUNT);
+    expect(demoTransactions[demoTransactions.length - 1].date.slice(0, 10)).toBe('2021-04-16');
+    expect(demoTransactions[0].date.slice(0, 10)).toBe('2024-09-16');
     expect(firstPage).toHaveLength(20);
     expect(secondPage).toHaveLength(20);
     expect(new Set([...firstPage, ...secondPage].map(({ id }) => id)).size).toBe(40);

@@ -2,6 +2,16 @@ import { format, parseISO, subDays } from 'date-fns';
 import type { Period } from '../types/api';
 
 export const DEMO_DATE_ANCHOR = '2024-09-16';
+export const DEMO_TRANSACTION_COUNT = 1250;
+export const DEMO_FIXTURE_START_DATE = format(
+  subDays(parseISO(DEMO_DATE_ANCHOR), DEMO_TRANSACTION_COUNT - 1),
+  'yyyy-MM-dd',
+);
+export const DEFAULT_DATE_RANGE = { startDate: '2024-06-01', endDate: '2024-06-30' };
+
+export function completeDateRange(startDate?: string, endDate?: string) {
+  return startDate && endDate ? { startDate, endDate } : {};
+}
 
 const periodDays: Record<Period, number> = {
   '7d': 7,

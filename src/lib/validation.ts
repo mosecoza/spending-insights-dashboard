@@ -2,15 +2,20 @@
 // the DTOs in src/types/api.ts by hand; types are never derived via z.infer so
 // the Markdown contract stays the normative source of truth - see docs/ARCHITECTURE.md.
 import { z } from 'zod';
+import { DEMO_DATE_ANCHOR, DEMO_FIXTURE_START_DATE } from './dateRange';
 
 export const periodSchema = z.enum(['7d', '30d', '90d', '1y']);
 export const sortBySchema = z.enum(['date_desc', 'date_asc', 'amount_desc', 'amount_asc']);
 export const customerIdSchema = z.string().trim().min(1).max(80);
 export const dateSchema = z.string().date();
+export const fixtureDateSchema = dateSchema.refine(
+  (date) => date >= DEMO_FIXTURE_START_DATE && date <= DEMO_DATE_ANCHOR,
+  `Date must be between ${DEMO_FIXTURE_START_DATE} and ${DEMO_DATE_ANCHOR}`,
+);
 export const categorySchema = z.string().trim().min(1).max(80);
 export const transactionLimitSchema = z.coerce.number().int().min(1).max(100);
 export const dateRangeSchema = z
-  .object({ startDate: dateSchema.optional(), endDate: dateSchema.optional() })
+  .object({ startDate: fixtureDateSchema.optional(), endDate: fixtureDateSchema.optional() })
   .refine(
     (v) => !v.startDate || !v.endDate || v.startDate <= v.endDate,
     'startDate must be before endDate',
@@ -19,8 +24,8 @@ export const dateRangeSchema = z
 export const dashboardFiltersSchema = z
   .object({
     period: periodSchema.default('30d'),
-    startDate: dateSchema.optional(),
-    endDate: dateSchema.optional(),
+    startDate: fixtureDateSchema.optional(),
+    endDate: fixtureDateSchema.optional(),
     category: z.string().trim().min(1).max(80).optional(),
     sortBy: sortBySchema.default('date_desc'),
     page: z.coerce.number().int().min(0).default(0),
@@ -37,8 +42,8 @@ export const transactionsQuerySchema = z
     limit: transactionLimitSchema.default(20),
     offset: z.coerce.number().int().min(0).default(0),
     category: z.string().trim().min(1).max(80).optional(),
-    startDate: dateSchema.optional(),
-    endDate: dateSchema.optional(),
+    startDate: fixtureDateSchema.optional(),
+    endDate: fixtureDateSchema.optional(),
     sortBy: sortBySchema.default('date_desc'),
   })
   .refine((query) => !query.startDate || !query.endDate || query.startDate <= query.endDate, {
@@ -49,8 +54,8 @@ export const transactionsQuerySchema = z
 export const categoriesQuerySchema = z
   .object({
     period: periodSchema.default('30d'),
-    startDate: dateSchema.optional(),
-    endDate: dateSchema.optional(),
+    startDate: fixtureDateSchema.optional(),
+    endDate: fixtureDateSchema.optional(),
   })
   .refine((query) => !query.startDate || !query.endDate || query.startDate <= query.endDate, {
     path: ['endDate'],
