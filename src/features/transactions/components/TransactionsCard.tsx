@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useTransactions, useFilterMeta } from '../hooks';
-import { useFilters } from '../../../store/useFilters';
-import { formatDateSA, zar } from '../../../lib/api';
-import { categorySchema, sortBySchema, transactionLimitSchema } from '../../../lib/validation';
-import { CategoryIcon } from '../../../lib/categoryIcons';
-import { CardSkeleton, EmptyState, QueryError } from '../../../components/StateViews';
+import { useFilters } from 'Store/useFilters';
+import { formatDateSA, zar } from 'Lib/api';
+import { categorySchema, sortBySchema, transactionLimitSchema } from 'Lib/validation';
+import { CategoryIcon } from 'Lib/categoryIcons';
+import { CardSkeleton, EmptyState, QueryError } from 'Components/StateViews';
 
 export default function TransactionsCard() {
   const { page, limit, category, sortBy, set } = useFilters();

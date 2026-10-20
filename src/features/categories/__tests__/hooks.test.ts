@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { api } from '../../../lib/api';
+import { api } from 'Lib/api';
 
 const captured = vi.hoisted(() => ({ options: undefined as unknown, state: undefined as unknown }));
 

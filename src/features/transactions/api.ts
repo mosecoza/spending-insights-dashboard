@@ -1,10 +1,10 @@
-import { api, customerApiPath } from '../../lib/api';
+import { api, customerApiPath } from 'Lib/api';
 import {
   filtersResponseSchema,
   transactionsQuerySchema,
   transactionsResponseSchema,
-} from '../../lib/validation';
-import type { SortBy } from '../../types/api';
+} from 'Lib/validation';
+import type { SortBy } from 'Types/api';
 
 export async function getTransactions(filters: {
   customerId: string;

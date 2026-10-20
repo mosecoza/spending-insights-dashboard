@@ -1,7 +1,7 @@
 import seed from './seed.json';
-import { DEMO_DATE_ANCHOR, periodDateRange, resolveDateRange } from '../lib/dateRange';
-import { DEFAULT_CUSTOMER_ID } from '../lib/api';
-import { demoCustomers, findDemoCustomer } from '../lib/demoCustomers';
+import { DEMO_DATE_ANCHOR, periodDateRange, resolveDateRange } from 'Lib/dateRange';
+import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { demoCustomers, findDemoCustomer } from 'Lib/demoCustomers';
 import type {
   CategoriesResponse,
   CategorySlice,
@@ -12,7 +12,7 @@ import type {
   SpendingSummary,
   Transaction,
   TrendPoint,
-} from '../types/api';
+} from 'Types/api';
 
 export const DEMO_TRANSACTION_COUNT = 1250;
 export const MOCK_TODAY = DEMO_DATE_ANCHOR;

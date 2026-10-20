@@ -1,8 +1,8 @@
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useSummary } from '../hooks';
-import { zar } from '../../../lib/api';
-import type { ComparedToPrevious } from '../../../types/api';
-import { CardSkeleton, QueryError } from '../../../components/StateViews';
+import { zar } from 'Lib/api';
+import type { ComparedToPrevious } from 'Types/api';
+import { CardSkeleton, QueryError } from 'Components/StateViews';
 
 export function SummaryComparison({
   spentChange,

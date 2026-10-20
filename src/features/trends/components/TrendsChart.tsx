@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import type { TrendPoint } from '../../../types/api';
-import { zar } from '../../../lib/api';
+import type { TrendPoint } from 'Types/api';
+import { zar } from 'Lib/api';
 
 export default function TrendsChart({ data }: { data: TrendPoint[] }) {
   return (

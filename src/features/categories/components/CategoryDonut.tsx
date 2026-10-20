@@ -1,5 +1,5 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import type { CategoriesResponse } from '../../../types/api';
+import type { CategoriesResponse } from 'Types/api';
 
 export default function CategoryDonut({ data }: { data: CategoriesResponse }) {
   return (

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '../../lib/api';
-import { useFilters } from '../../store/useFilters';
+import { queryKeys } from 'Lib/api';
+import { useFilters } from 'Store/useFilters';
 import { getSummary } from './api';
 
 export function useSummary() {

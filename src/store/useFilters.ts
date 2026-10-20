@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { parseFilterSearch } from '../lib/filterUrl';
-import { DEFAULT_CUSTOMER_ID } from '../lib/api';
-import { customerIdSchema } from '../lib/validation';
-import type { DashboardFilters } from '../lib/filterUrl';
+import { parseFilterSearch } from 'Lib/filterUrl';
+import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { customerIdSchema } from 'Lib/validation';
+import type { DashboardFilters } from 'Lib/filterUrl';
 
 interface FilterState extends DashboardFilters {
   customerId: string;

@@ -1,6 +1,6 @@
-import { api, customerApiPath } from '../../lib/api';
-import { periodSchema, spendingSummarySchema } from '../../lib/validation';
-import type { Period } from '../../types/api';
+import { api, customerApiPath } from 'Lib/api';
+import { periodSchema, spendingSummarySchema } from 'Lib/validation';
+import type { Period } from 'Types/api';
 
 export async function getSummary(customerId: string, period: Period) {
   const validPeriod = periodSchema.parse(period);

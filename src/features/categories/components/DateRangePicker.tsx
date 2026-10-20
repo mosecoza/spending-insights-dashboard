@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { UI_STRINGS } from '../../../constants/copy';
-import { formatDateSA, parseDateSA } from '../../../lib/api';
-import { dateRangeSchema, dateSchema } from '../../../lib/validation';
-import { useFilters } from '../../../store/useFilters';
+import { UI_STRINGS } from 'Constants/copy';
+import { formatDateSA, parseDateSA } from 'Lib/api';
+import { dateRangeSchema, dateSchema } from 'Lib/validation';
+import { useFilters } from 'Store/useFilters';
 
 export default function DateRangePicker() {
   const { startDate, endDate, set } = useFilters();

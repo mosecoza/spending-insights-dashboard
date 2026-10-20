@@ -1,5 +1,5 @@
 import { dashboardFiltersSchema } from './validation';
-import type { Period, SortBy } from '../types/api';
+import type { Period, SortBy } from 'Types/api';
 
 export interface DashboardFilters {
   period: Period;

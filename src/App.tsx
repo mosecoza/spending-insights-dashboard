@@ -1,13 +1,13 @@
-import { ErrorBoundary } from './components/ErrorBoundary';
-import ProfileHeader from './features/profile/components/ProfileHeader';
-import PeriodPicker from './features/summary/components/PeriodPicker';
-import SummaryCards from './features/summary/components/SummaryCards';
-import CategoriesCard from './features/categories/components/CategoriesCard';
-import DateRangePicker from './features/categories/components/DateRangePicker';
-import TrendsCard from './features/trends/components/TrendsCard';
-import TransactionsCard from './features/transactions/components/TransactionsCard';
-import GoalsCard from './features/goals/components/GoalsCard';
-import { FilterUrlSync } from './components/FilterUrlSync';
+import { ErrorBoundary } from 'Components/ErrorBoundary';
+import ProfileHeader from 'Features/profile/components/ProfileHeader';
+import PeriodPicker from 'Features/summary/components/PeriodPicker';
+import SummaryCards from 'Features/summary/components/SummaryCards';
+import CategoriesCard from 'Features/categories/components/CategoriesCard';
+import DateRangePicker from 'Features/categories/components/DateRangePicker';
+import TrendsCard from 'Features/trends/components/TrendsCard';
+import TransactionsCard from 'Features/transactions/components/TransactionsCard';
+import GoalsCard from 'Features/goals/components/GoalsCard';
+import { FilterUrlSync } from 'Components/FilterUrlSync';
 
 export default function App() {
   return (

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { DEFAULT_CUSTOMER_ID } from '../lib/api';
-import { useFilters } from '../store/useFilters';
+import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { useFilters } from 'Store/useFilters';
 import { syncFiltersFromSearch } from './FilterUrlSync';
 
 describe('filter URL synchronization', () => {
