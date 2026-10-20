@@ -10,4 +10,6 @@ Base: /api/customers/{customerId}
 6. GET /goals -> {goals[]:{id,category,monthlyBudget,currentSpent,percentageUsed,daysRemaining,status:on_track|warning|over_budget}}
 7. GET /filters -> {categories[]:{name,color,icon},dateRangePresets[]:{label,value}}
 
+The dashboard defaults custom dates to `2024-06-01` through `2024-06-30`. Custom date parameters are sent to the categories and transactions endpoints only as a complete, valid range. Each supplied date must fall inclusively between the earliest deterministic fixture transaction (`2021-04-16`) and the demo anchor (`2024-09-16`); ranges outside these bounds are rejected. An incomplete picker range remains in dashboard filter state but is omitted from both endpoint requests. Clearing dates restores the default June 2024 range.
+
 Mock data is available for customer IDs `12345`, `67890`, and `24680`. Requests for other IDs return HTTP 404; the customer ID is selected in the dashboard and is not serialized into the URL.
