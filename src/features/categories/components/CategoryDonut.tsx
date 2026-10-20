@@ -1,7 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import type { CategoriesResponse } from '../../../types/api';
-import { zar } from '../../../lib/api';
-
+import type { CategoriesResponse } from 'Types/api';
+import { zar } from 'Lib/api';
 export default function CategoryDonut({ data }: { data: CategoriesResponse }) {
   return (
     <div role="img" aria-label={`Spending by category, total ${data.totalAmount}`}>

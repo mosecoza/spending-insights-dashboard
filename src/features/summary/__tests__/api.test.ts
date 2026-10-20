@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { api } from '../../../lib/api';
-import { createAxiosResponse } from '../../../lib/testUtils';
+import { api } from 'Lib/api';
+import { createAxiosResponse } from 'Lib/testUtils';
 import { getSummary } from '../api';
 
 describe('summary API', () => {

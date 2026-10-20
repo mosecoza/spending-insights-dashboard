@@ -1,5 +1,5 @@
 import { DEFAULT_CUSTOMER_ID } from './api';
-import type { CustomerProfile } from '../types/api';
+import type { CustomerProfile } from 'Types/api';
 
 export interface DemoCustomer extends CustomerProfile {
   transactionVariant: number;

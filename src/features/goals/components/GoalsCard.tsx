@@ -1,8 +1,8 @@
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useGoals } from '../hooks';
-import { zar } from '../../../lib/api';
-import type { GoalStatus } from '../../../types/api';
-import { CardSkeleton, EmptyState, QueryError } from '../../../components/StateViews';
+import { zar } from 'Lib/api';
+import type { GoalStatus } from 'Types/api';
+import { CardSkeleton, EmptyState, QueryError } from 'Components/StateViews';
 
 const statusStyles: Record<GoalStatus, { pill: string; dot: string; bar: string }> = {
   on_track: {

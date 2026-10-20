@@ -1,7 +1,7 @@
-import { api, customerApiPath } from '../../lib/api';
-import { completeDateRange } from '../../lib/dateRange';
-import { categoriesQuerySchema, categoriesResponseSchema } from '../../lib/validation';
-import type { Period } from '../../types/api';
+import { api, customerApiPath } from 'Lib/api';
+import { completeDateRange } from 'Lib/dateRange';
+import { categoriesQuerySchema, categoriesResponseSchema } from 'Lib/validation';
+import type { Period } from 'Types/api';
 
 export async function getCategories(filters: {
   customerId: string;

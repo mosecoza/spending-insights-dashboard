@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import {
-  DEMO_DATE_ANCHOR,
-  DEMO_FIXTURE_START_DATE,
-  DEFAULT_DATE_RANGE,
-} from '../../../lib/dateRange';
-import { dateRangeSchema, fixtureDateSchema } from '../../../lib/validation';
-import { useFilters } from '../../../store/useFilters';
-import { UI_STRINGS } from '../../../constants/copy';
+import { DEMO_DATE_ANCHOR, DEMO_FIXTURE_START_DATE, DEFAULT_DATE_RANGE } from 'Lib/dateRange';
+import { dateRangeSchema, fixtureDateSchema } from 'Lib/validation';
+import { useFilters } from 'Store/useFilters';
+import { UI_STRINGS } from 'Constants/copy';
 
 export default function DateRangePicker() {
   const { startDate, endDate, set } = useFilters();

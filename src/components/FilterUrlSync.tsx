@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { parseFilterSearch, serializeFilterSearch } from '../lib/filterUrl';
-import { useFilters } from '../store/useFilters';
+import { parseFilterSearch, serializeFilterSearch } from 'Lib/filterUrl';
+import { useFilters } from 'Store/useFilters';
 
 export function syncFiltersFromSearch(search: string) {
   const parsed = parseFilterSearch(search);

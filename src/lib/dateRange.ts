@@ -1,5 +1,5 @@
 import { format, parseISO, subDays } from 'date-fns';
-import type { Period } from '../types/api';
+import type { Period } from 'Types/api';
 
 export const DEMO_DATE_ANCHOR = '2024-09-16';
 export const DEMO_TRANSACTION_COUNT = 1250;

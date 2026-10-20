@@ -4,9 +4,9 @@ import {
   DEMO_TRANSACTION_COUNT,
   periodDateRange,
   resolveDateRange,
-} from '../lib/dateRange';
-import { DEFAULT_CUSTOMER_ID } from '../lib/api';
-import { demoCustomers, findDemoCustomer } from '../lib/demoCustomers';
+} from 'Lib/dateRange';
+import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { demoCustomers, findDemoCustomer } from 'Lib/demoCustomers';
 import type {
   CategoriesResponse,
   CategorySlice,
@@ -17,7 +17,7 @@ import type {
   SpendingSummary,
   Transaction,
   TrendPoint,
-} from '../types/api';
+} from 'Types/api';
 
 export { DEMO_TRANSACTION_COUNT };
 export const MOCK_TODAY = DEMO_DATE_ANCHOR;

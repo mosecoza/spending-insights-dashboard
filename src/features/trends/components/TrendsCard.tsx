@@ -1,14 +1,9 @@
 import { Suspense, lazy } from 'react';
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useTrends } from '../hooks';
-import { useFilters } from '../../../store/useFilters';
-import { trendsQuerySchema } from '../../../lib/validation';
-import {
-  CardSkeleton,
-  ChartSkeleton,
-  EmptyState,
-  QueryError,
-} from '../../../components/StateViews';
+import { useFilters } from 'Store/useFilters';
+import { trendsQuerySchema } from 'Lib/validation';
+import { CardSkeleton, ChartSkeleton, EmptyState, QueryError } from 'Components/StateViews';
 
 const TrendsChart = lazy(() => import('./TrendsChart'));
 

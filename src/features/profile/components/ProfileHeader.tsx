@@ -1,9 +1,9 @@
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useProfile } from '../hooks';
-import { formatDateSA, zar } from '../../../lib/api';
-import { demoCustomerOptions } from '../../../lib/demoCustomers';
-import { useFilters } from '../../../store/useFilters';
-import { CardSkeleton, QueryError } from '../../../components/StateViews';
+import { formatDateSA, zar } from 'Lib/api';
+import { demoCustomerOptions } from 'Lib/demoCustomers';
+import { useFilters } from 'Store/useFilters';
+import { CardSkeleton, QueryError } from 'Components/StateViews';
 
 export default function ProfileHeader() {
   const { data, isLoading, isError, refetch, isFetching } = useProfile();

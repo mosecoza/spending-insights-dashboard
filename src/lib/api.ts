@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { customerIdSchema } from './validation';
-import type { Period, SortBy } from '../types/api';
+import type { Period, SortBy } from 'Types/api';
 
 export const api = axios.create({ baseURL: '/api', timeout: 10000 });
 

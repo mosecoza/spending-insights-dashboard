@@ -1,14 +1,9 @@
 import { Suspense, lazy } from 'react';
-import { UI_STRINGS } from '../../../constants/copy';
+import { UI_STRINGS } from 'Constants/copy';
 import { useCategories } from '../hooks';
-import { zar } from '../../../lib/api';
-import { CategoryIcon } from '../../../lib/categoryIcons';
-import {
-  CardSkeleton,
-  ChartSkeleton,
-  EmptyState,
-  QueryError,
-} from '../../../components/StateViews';
+import { zar } from 'Lib/api';
+import { CategoryIcon } from 'Lib/categoryIcons';
+import { CardSkeleton, ChartSkeleton, EmptyState, QueryError } from 'Components/StateViews';
 
 const CategoryDonut = lazy(() => import('./CategoryDonut'));
 

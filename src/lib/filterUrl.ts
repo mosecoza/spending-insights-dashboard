@@ -1,6 +1,6 @@
-import { dashboardFiltersSchema } from './validation';
+import { Period, SortBy } from 'Types/api';
 import { DEFAULT_DATE_RANGE } from './dateRange';
-import type { Period, SortBy } from '../types/api';
+import { dashboardFiltersSchema } from './validation';
 
 export interface DashboardFilters {
   period: Period;

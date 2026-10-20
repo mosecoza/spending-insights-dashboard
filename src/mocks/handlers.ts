@@ -5,8 +5,8 @@ import {
   periodSchema,
   transactionsQuerySchema,
   trendsQuerySchema,
-} from '../lib/validation';
-import { findDemoCustomer } from '../lib/demoCustomers';
+} from 'Lib/validation';
+import { findDemoCustomer } from 'Lib/demoCustomers';
 import {
   filterTransactions,
   getCategories,

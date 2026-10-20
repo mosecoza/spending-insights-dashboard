@@ -1,11 +1,11 @@
-import { api, customerApiPath } from '../../lib/api';
-import { completeDateRange } from '../../lib/dateRange';
+import { api, customerApiPath } from 'Lib/api';
+import { completeDateRange } from 'Lib/dateRange';
 import {
   filtersResponseSchema,
   transactionsQuerySchema,
   transactionsResponseSchema,
-} from '../../lib/validation';
-import type { SortBy } from '../../types/api';
+} from 'Lib/validation';
+import type { SortBy } from 'Types/api';
 
 export async function getTransactions(filters: {
   customerId: string;

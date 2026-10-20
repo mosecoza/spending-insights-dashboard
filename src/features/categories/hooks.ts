@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { queryKeys } from '../../lib/api';
-import { completeDateRange } from '../../lib/dateRange';
-import { useFilters } from '../../store/useFilters';
+import { queryKeys } from 'Lib/api';
+import { completeDateRange } from 'Lib/dateRange';
+import { useFilters } from 'Store/useFilters';
 import { getCategories } from './api';
 
 export function useCategories() {

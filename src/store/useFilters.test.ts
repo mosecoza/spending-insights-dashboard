@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { DEFAULT_CUSTOMER_ID } from '../lib/api';
-import { DEFAULT_DATE_RANGE } from '../lib/dateRange';
+import { DEFAULT_CUSTOMER_ID } from 'Lib/api';
+import { DEFAULT_DATE_RANGE } from 'Lib/dateRange';
 import { useFilters } from './useFilters';
 
 describe('active customer state', () => {

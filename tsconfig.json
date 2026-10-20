@@ -6,6 +6,15 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "Components/*": ["src/components/*"],
+      "Features/*": ["src/features/*"],
+      "Store/*": ["src/store/*"],
+      "Lib/*": ["src/lib/*"],
+      "Constants/*": ["src/constants/*"],
+      "Types/*": ["src/types/*"]
+    },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,

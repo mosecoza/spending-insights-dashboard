@@ -1,6 +1,6 @@
-import { UI_STRINGS } from '../../../constants/copy';
-import { useFilters } from '../../../store/useFilters';
-import type { Period } from '../../../types/api';
+import { UI_STRINGS } from 'Constants/copy';
+import { useFilters } from 'Store/useFilters';
+import type { Period } from 'Types/api';
 
 export default function PeriodPicker() {
   const { period, set } = useFilters();
